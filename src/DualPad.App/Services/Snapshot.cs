@@ -37,6 +37,12 @@ internal static class Snapshot
             window.Navigate(page);
             await Task.Delay(700);
             Save(window, Path.Combine(directory, page + ".png"));
+            if (FindScroll(window.PageHost.Content as DependencyObject) is { } scroll && scroll.ScrollableHeight > 0)
+            {
+                scroll.ScrollToEnd();
+                await Task.Delay(400);
+                Save(window, Path.Combine(directory, page + "-bottom.png"));
+            }
         }
 
         Application.Current.Shutdown();
@@ -64,5 +70,14 @@ internal static class Snapshot
         encoder.Frames.Add(BitmapFrame.Create(bitmap));
         using var stream = File.Create(file);
         encoder.Save(stream);
+    }
+
+    private static System.Windows.Controls.ScrollViewer? FindScroll(DependencyObject? root)
+    {
+        if (root is null) return null;
+        if (root is System.Windows.Controls.ScrollViewer scroll) return scroll;
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            if (FindScroll(VisualTreeHelper.GetChild(root, i)) is { } found) return found;
+        return null;
     }
 }

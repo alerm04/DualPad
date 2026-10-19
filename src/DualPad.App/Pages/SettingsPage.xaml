@@ -41,20 +41,24 @@
                 <ui:ToggleSwitch x:Name="HideController" Click="OnHideChanged" />
             </ui:CardControl>
             <StackPanel x:Name="HidHideActions" Orientation="Horizontal" Margin="0,8,0,0">
-                <ui:HyperlinkButton x:Name="HidHideDownload" Content="Scarica HidHide" NavigateUri="https://github.com/nefarius/HidHide/releases/latest" />
-                <ui:Button x:Name="UnhideButton" Margin="8,0,0,0" Content="Rendi di nuovo visibile il controller" Click="OnUnhide" />
+                <ui:Button x:Name="UnhideButton" Content="Rendi di nuovo visibile il controller" Click="OnUnhide" />
             </StackPanel>
 
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Driver" />
-            <ui:CardControl Icon="{ui:SymbolIcon XboxController24}">
-                <ui:CardControl.Header>
-                    <StackPanel>
-                        <TextBlock FontSize="14" Text="ViGEmBus (controller Xbox virtuale)" />
-                        <TextBlock x:Name="ViGEmStatus" Style="{StaticResource Caption}" />
-                    </StackPanel>
-                </ui:CardControl.Header>
-                <ui:HyperlinkButton Content="Pagina del driver" NavigateUri="https://github.com/nefarius/ViGEmBus/releases/latest" />
-            </ui:CardControl>
+            <DockPanel Margin="0,18,0,8">
+                <ui:Button x:Name="InstallMissing" DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon ArrowDownload24}"
+                           Content="Installa tutto ciò che manca" Click="OnInstallMissing" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="Driver e componenti" />
+                    <TextBlock x:Name="DriversSummary" Style="{StaticResource Caption}" Margin="0,2,0,0" />
+                </StackPanel>
+            </DockPanel>
+            <StackPanel x:Name="DriverList" />
+            <ui:InfoBar x:Name="DriverResult" Margin="0,8,0,0" IsOpen="False" IsClosable="True" />
+            <StackPanel x:Name="RestartRow" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Collapsed">
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowClockwise24}" Content="Riavvia DualPad" Click="OnRestartApp" />
+            </StackPanel>
+            <TextBlock Margin="0,8,0,0" Style="{StaticResource Caption}"
+                       Text="Le installazioni usano winget (il gestore pacchetti di Windows) e scaricano dalle fonti ufficiali. Windows chiederà i permessi di amministratore; installando accetti le licenze dei componenti." />
 
             <TextBlock Style="{StaticResource SectionTitle}" Text="Informazioni" />
             <Border Style="{StaticResource Panel}">

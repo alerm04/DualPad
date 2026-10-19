@@ -57,6 +57,17 @@ public partial class App : Application
         state.Start();
     }
 
+    /// <summary>Starts a fresh DualPad and closes this one (e.g. after installing a driver).</summary>
+    public static void Restart()
+    {
+        var app = (App)Current;
+        app._mutex?.ReleaseMutex();
+        app._mutex?.Dispose();
+        app._mutex = null;
+        if (Environment.ProcessPath is { } exe) System.Diagnostics.Process.Start(exe);
+        (app.MainWindow as MainWindow)?.ExitApp();
+    }
+
     public static void ApplyTheme(string theme)
     {
         var applied = theme switch
