@@ -1,0 +1,20 @@
+<UserControl x:Class="DualPad.App.Pages.ProfilesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,4,28,28">
+            <TextBlock Style="{StaticResource PageTitle}" Text="Profili" />
+            <TextBlock Style="{StaticResource PageSubtitle}"
+                       Text="Un profilo contiene tasti, touchpad, stick, luci e vibrazione. Creane uno per ogni gioco e cambialo dalla barra in alto." />
+
+            <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon Add24}" Content="Nuovo profilo Xbox" Click="OnNew" />
+                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon ArrowImport24}" Content="Importa…" Click="OnImport" />
+                <ui:Button Margin="8,0,0,0" Icon="{ui:SymbolIcon OpenFolder24}" Content="Apri cartella" Click="OnOpenFolder" />
+            </StackPanel>
+
+            <StackPanel x:Name="List" Margin="0,16,0,0" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

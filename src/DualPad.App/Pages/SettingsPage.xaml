@@ -1,0 +1,70 @@
+<UserControl x:Class="DualPad.App.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28,4,28,28" MaxWidth="900" HorizontalAlignment="Left">
+            <TextBlock Style="{StaticResource PageTitle}" Text="Impostazioni" />
+
+            <TextBlock Style="{StaticResource SectionTitle}" Text="Avvio" />
+            <ui:CardControl Icon="{ui:SymbolIcon Power24}" Header="Avvia DualPad con Windows">
+                <ui:ToggleSwitch x:Name="StartWithWindows" Click="OnChanged" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Window24}" Header="Avvia ridotto a icona nell'area di notifica">
+                <ui:ToggleSwitch x:Name="StartMinimized" Click="OnChanged" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon WindowArrowUp24}" Header="Chiudendo la finestra resta attivo vicino all'orologio">
+                <ui:ToggleSwitch x:Name="MinimizeToTray" Click="OnChanged" />
+            </ui:CardControl>
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Info24}" Header="Notifiche di connessione e batteria">
+                <ui:ToggleSwitch x:Name="Notifications" Click="OnChanged" />
+            </ui:CardControl>
+
+            <TextBlock Style="{StaticResource SectionTitle}" Text="Aspetto" />
+            <ui:CardControl Icon="{ui:SymbolIcon PaintBrush24}" Header="Tema">
+                <ComboBox x:Name="Theme" MinWidth="160" SelectionChanged="OnThemeChanged">
+                    <ComboBoxItem Content="Come Windows" Tag="System" />
+                    <ComboBoxItem Content="Scuro" Tag="Dark" />
+                    <ComboBoxItem Content="Chiaro" Tag="Light" />
+                </ComboBox>
+            </ui:CardControl>
+
+            <TextBlock Style="{StaticResource SectionTitle}" Text="Giochi" />
+            <ui:CardControl Icon="{ui:SymbolIcon EyeOff24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock FontSize="14" Text="Nascondi il DualSense ai giochi (HidHide)" />
+                        <TextBlock x:Name="HidHideStatus" Style="{StaticResource Caption}"
+                                   Text="Evita il doppio input nei giochi che leggono anche il controller PlayStation." />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch x:Name="HideController" Click="OnHideChanged" />
+            </ui:CardControl>
+            <StackPanel x:Name="HidHideActions" Orientation="Horizontal" Margin="0,8,0,0">
+                <ui:HyperlinkButton x:Name="HidHideDownload" Content="Scarica HidHide" NavigateUri="https://github.com/nefarius/HidHide/releases/latest" />
+                <ui:Button x:Name="UnhideButton" Margin="8,0,0,0" Content="Rendi di nuovo visibile il controller" Click="OnUnhide" />
+            </StackPanel>
+
+            <TextBlock Style="{StaticResource SectionTitle}" Text="Driver" />
+            <ui:CardControl Icon="{ui:SymbolIcon XboxController24}">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock FontSize="14" Text="ViGEmBus (controller Xbox virtuale)" />
+                        <TextBlock x:Name="ViGEmStatus" Style="{StaticResource Caption}" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:HyperlinkButton Content="Pagina del driver" NavigateUri="https://github.com/nefarius/ViGEmBus/releases/latest" />
+            </ui:CardControl>
+
+            <TextBlock Style="{StaticResource SectionTitle}" Text="Informazioni" />
+            <Border Style="{StaticResource Panel}">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold" x:Name="VersionText" Text="DualPad" />
+                    <TextBlock Margin="0,6,0,0" Style="{StaticResource Caption}"
+                               Text="Ispirato a DS4Windows (Ryochan7 e contributori), studiato con REA. Usa i driver ViGEmBus e HidHide di Nefarius." />
+                    <ui:Button Margin="0,12,0,0" Icon="{ui:SymbolIcon OpenFolder24}" Content="Apri cartella dei dati" Click="OnOpenData" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
