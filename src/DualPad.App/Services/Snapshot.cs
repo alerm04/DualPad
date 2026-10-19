@@ -32,7 +32,7 @@ internal static class Snapshot
         };
         window.Show();
 
-        foreach (var page in new[] { "home", "mapping", "sticks", "lights", "profiles", "settings" })
+        foreach (var page in new[] { "home", "mapping", "sticks", "lights", "profiles", "advanced", "settings" })
         {
             window.Navigate(page);
             await Task.Delay(700);

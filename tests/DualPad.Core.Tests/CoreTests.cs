@@ -241,3 +241,31 @@ public class MappingTests
         Assert.Equal(ButtonAction.ToXbox(XboxControl.A), copy.Buttons[DsButtons.Cross]);
     }
 }
+
+public class DiagnosticsTests
+{
+    [Theory]
+    [InlineData("0c27568e6df3", 0x0C27568E6DF3UL)]
+    [InlineData("0C:27:56:8E:6D:F3", 0x0C27568E6DF3UL)]
+    public void ParsesBluetoothAddress(string mac, ulong expected)
+    {
+        Assert.True(DualPad.Core.DualSense.BluetoothControl.TryParseAddress(mac, out var address));
+        Assert.Equal(expected, address);
+    }
+
+    [Fact]
+    public void RejectsNonMacSerial() =>
+        Assert.False(DualPad.Core.DualSense.BluetoothControl.TryParseAddress(@"HID\VID_054C&PID_0CE6\7&1", out _));
+
+    [Fact]
+    public void SummarizesTimings()
+    {
+        var f = System.Diagnostics.Stopwatch.Frequency;
+        var ticks = Enumerable.Range(1, 100).Select(i => i * f / 1000).ToList(); // 1..100 ms
+        var summary = DualPad.Core.Diagnostics.TimingSummary.From(ticks);
+        Assert.Equal(100, summary.Count);
+        Assert.Equal(50.5, summary.Average, 1);
+        Assert.Equal(100, summary.Max, 1);
+        Assert.InRange(summary.P99, 99, 100);
+    }
+}

@@ -4,7 +4,10 @@ namespace DualPad.Core.DualSense;
 
 public delegate void StateHandler(DualSenseDevice sender, in DualSenseState state);
 
-/// <summary>A connected DualSense: reads input on a background task and writes output reports on demand.</summary>
+/// <summary>
+/// A connected DualSense. Input is read on a dedicated high-priority thread and handled on that same
+/// thread, so a report reaches the virtual Xbox controller without any queueing or thread hop.
+/// </summary>
 public sealed class DualSenseDevice : IDisposable
 {
     private readonly HidDevice _hid;
@@ -14,7 +17,7 @@ public sealed class DualSenseDevice : IDisposable
     private DualSenseOutput _output;
     private bool _outputDirty;
     private byte _btSequence;
-    private Task? _readTask;
+    private Thread? _readThread;
     private Thread? _writeThread;
     private int _disposed;
 
@@ -27,6 +30,9 @@ public sealed class DualSenseDevice : IDisposable
     public string Serial { get; }
 
     public DualSenseState LastState { get; private set; }
+
+    /// <summary><see cref="System.Diagnostics.Stopwatch"/> timestamp taken as soon as the last report was read.</summary>
+    public long LastReportTimestamp { get; private set; }
 
     public event StateHandler? StateReceived;
     public event Action<DualSenseDevice>? Disconnected;
@@ -61,7 +67,8 @@ public sealed class DualSenseDevice : IDisposable
             _hid.GetFeature(feature);
         }
 
-        _readTask = Task.Run(ReadLoop);
+        _readThread = new Thread(ReadLoop) { IsBackground = true, Name = "DualSense input", Priority = ThreadPriority.Highest };
+        _readThread.Start();
         _writeThread = new Thread(WriteLoop) { IsBackground = true, Name = "DualSense output", Priority = ThreadPriority.AboveNormal };
         _writeThread.Start();
     }
@@ -78,7 +85,7 @@ public sealed class DualSenseDevice : IDisposable
         _outputSignal.Set();
     }
 
-    private async Task ReadLoop()
+    private void ReadLoop()
     {
         var buffer = new byte[Math.Max((int)_hid.Info.InputReportLength, 78)];
         var token = _cts.Token;
@@ -86,20 +93,18 @@ public sealed class DualSenseDevice : IDisposable
         {
             while (!token.IsCancellationRequested)
             {
-                var read = await _hid.ReadAsync(buffer.AsMemory(0, _hid.Info.InputReportLength), token).ConfigureAwait(false);
+                var read = _hid.Read(buffer, _hid.Info.InputReportLength);
+                var timestamp = System.Diagnostics.Stopwatch.GetTimestamp();
                 if (read <= 0) break;
                 if (!DualSenseProtocol.TryParseInput(buffer.AsSpan(0, read), Connection, out var state)) continue;
+                LastReportTimestamp = timestamp;
                 LastState = state;
                 StateReceived?.Invoke(this, in state);
             }
         }
-        catch (OperationCanceledException)
-        {
-            return;
-        }
         catch (Exception)
         {
-            // Device removed or the handle was closed.
+            // Device removed, or Dispose cancelled the pending read.
         }
 
         if (!token.IsCancellationRequested) Disconnected?.Invoke(this);
@@ -140,7 +145,8 @@ public sealed class DualSenseDevice : IDisposable
         if (Interlocked.Exchange(ref _disposed, 1) != 0) return;
         _cts.Cancel();
         _outputSignal.Set();
-        try { _readTask?.Wait(500); } catch (AggregateException) { }
+        _hid.CancelPendingIo();
+        _readThread?.Join(500);
         _writeThread?.Join(500);
         _hid.Dispose();
         _cts.Dispose();

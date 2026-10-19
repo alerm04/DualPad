@@ -193,9 +193,25 @@ public sealed partial class AppState : ObservableObject, IDisposable
         else dispatcher.BeginInvoke(action);
     }
 
-    public void Dispose()
+    public void Dispose() => Shutdown(powerOffControllers: false);
+
+    /// <summary>Saves pending changes and releases every controller, turning Bluetooth ones off if asked.</summary>
+    public void Shutdown(bool powerOffControllers)
     {
         FlushSave();
-        Service.Dispose();
+        Service.Shutdown(powerOffControllers);
+    }
+
+    /// <summary>Applies the high-priority preference to this process.</summary>
+    public void ApplyProcessPriority()
+    {
+        try
+        {
+            System.Diagnostics.Process.GetCurrentProcess().PriorityClass =
+                Settings.HighPriority ? System.Diagnostics.ProcessPriorityClass.High : System.Diagnostics.ProcessPriorityClass.Normal;
+        }
+        catch (System.ComponentModel.Win32Exception)
+        {
+        }
     }
 }

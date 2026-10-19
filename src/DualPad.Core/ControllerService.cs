@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using DualPad.Core.Diagnostics;
 using DualPad.Core.DualSense;
 using DualPad.Core.Hid;
 using DualPad.Core.Input;
@@ -16,6 +18,7 @@ public sealed class ControllerSession : IDisposable
     private byte _rumbleLeft, _rumbleRight;
     private DualSenseOutput _output;
     private int _lastBatteryBand = -1;
+    private long _previousReport;
 
     public DualSenseDevice Device { get; }
     public XboxOutput? Xbox { get; }
@@ -27,6 +30,12 @@ public sealed class ControllerSession : IDisposable
     public DualSenseState State { get; private set; }
     public XboxReport LastReport { get; private set; }
     public DateTime ConnectedAt { get; } = DateTime.Now;
+
+    /// <summary>Report intervals and processing times, for the latency test.</summary>
+    public LatencyStats Stats { get; } = new();
+
+    /// <summary>Stopwatch timestamp of the last report actually handed to the virtual Xbox controller.</summary>
+    public long LastSubmitTimestamp { get; private set; }
 
     public event Action<ControllerSession>? Disconnected;
     public event Action<ControllerSession, int>? BatteryChanged;
@@ -76,7 +85,7 @@ public sealed class ControllerSession : IDisposable
         {
             var report = _engine.Process(state, profile, _sink);
             LastReport = report;
-            Xbox?.Submit(report);
+            if (Xbox?.Submit(report) == true) LastSubmitTimestamp = Stopwatch.GetTimestamp();
         }
         else
         {
@@ -85,6 +94,10 @@ public sealed class ControllerSession : IDisposable
             LastReport = neutral;
             Xbox?.Submit(neutral);
         }
+
+        var received = sender.LastReportTimestamp;
+        if (_previousReport != 0) Stats.Add(received - _previousReport, Stopwatch.GetTimestamp() - received);
+        _previousReport = received;
 
         if (state.Battery != previousBattery)
         {
@@ -300,13 +313,29 @@ public sealed class ControllerService : IDisposable
         SessionsChanged?.Invoke();
     }
 
-    public void Dispose()
+    public void Dispose() => Shutdown(powerOffControllers: false);
+
+    /// <summary>Stops every controller; optionally turns off the ones connected over Bluetooth.</summary>
+    public void Shutdown(bool powerOffControllers)
     {
         _scanTimer?.Dispose();
+        List<ControllerSession> sessions;
         lock (_lock)
         {
-            foreach (var s in _sessions) s.Dispose();
+            sessions = [.. _sessions];
             _sessions.Clear();
         }
+
+        foreach (var s in sessions)
+        {
+            var bluetooth = s.Device.Connection == ConnectionType.Bluetooth;
+            var mac = s.Device.Serial;
+            s.Dispose();
+            if (powerOffControllers && bluetooth) BluetoothControl.Disconnect(mac);
+        }
     }
+
+    /// <summary>Turns off one Bluetooth controller now.</summary>
+    public static bool PowerOff(ControllerSession session) =>
+        session.Device.Connection == ConnectionType.Bluetooth && BluetoothControl.Disconnect(session.Device.Serial);
 }

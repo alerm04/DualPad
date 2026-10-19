@@ -104,12 +104,19 @@ public sealed class HidDevice : IDisposable
             return null;
         }
 
-        NativeMethods.HidD_SetNumInputBuffers(handle, 3);
+        // The minimum queue (2) keeps the driver from handing us stale reports after a hiccup.
+        NativeMethods.HidD_SetNumInputBuffers(handle, 2);
         return new HidDevice(handle, writeHandle, info);
     }
 
     public ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken) =>
         _readStream.ReadAsync(buffer, cancellationToken);
+
+    /// <summary>Blocks the calling thread until the next input report arrives (no thread-pool hop).</summary>
+    public int Read(byte[] buffer, int count) => _readStream.Read(buffer, 0, count);
+
+    /// <summary>Aborts a pending <see cref="Read"/> from another thread.</summary>
+    public void CancelPendingIo() => NativeMethods.CancelIoEx(_handle, IntPtr.Zero);
 
     /// <summary>Writes an output report, falling back to HidD_SetOutputReport when WriteFile is rejected.</summary>
     public bool Write(byte[] report)

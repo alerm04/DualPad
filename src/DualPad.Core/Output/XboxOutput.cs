@@ -53,9 +53,10 @@ public sealed class XboxOutput : IDisposable
         return output;
     }
 
-    public void Submit(in XboxReport report)
+    /// <summary>Sends the report to the driver. Returns false when nothing changed and no call was needed.</summary>
+    public bool Submit(in XboxReport report)
     {
-        if (_hasLast && report.Equals(_last)) return;
+        if (_hasLast && report.Equals(_last)) return false;
         _last = report;
         _hasLast = true;
 
@@ -67,6 +68,7 @@ public sealed class XboxOutput : IDisposable
         _controller.SetAxisValue(Xbox360Axis.RightThumbX, report.RightX);
         _controller.SetAxisValue(Xbox360Axis.RightThumbY, report.RightY);
         _controller.SubmitReport();
+        return true;
     }
 
     private void OnFeedback(object? sender, Xbox360FeedbackReceivedEventArgs e)

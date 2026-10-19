@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -39,6 +39,7 @@ public partial class MainWindow : FluentWindow
                 "lights" => new LightsPage(),
                 "profiles" => new ProfilesPage(),
                 "settings" => new SettingsPage(),
+                "advanced" => new AdvancedPage(),
                 _ => new HomePage(),
             };
             _pages[key] = page;
@@ -114,6 +115,11 @@ public partial class MainWindow : FluentWindow
     private void OnTrayOpen(object sender, RoutedEventArgs e) => ShowFromTray();
 
     private void OnTrayExit(object sender, RoutedEventArgs e) => ExitApp();
+
+    private void OnTrayPowerOff(object sender, RoutedEventArgs e)
+    {
+        foreach (var session in AppState.Instance.Service.Sessions) Core.ControllerService.PowerOff(session);
+    }
 
     public void ExitApp()
     {

@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow x:Class="DualPad.App.MainWindow"
+<ui:FluentWindow x:Class="DualPad.App.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
@@ -59,6 +59,12 @@
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="PersonAccounts24" FontSize="20" />
                             <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Profili" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource NavButton}" Tag="advanced" Checked="OnNav">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Gauge24" FontSize="20" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Avanzate" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -122,6 +128,7 @@
                     <MenuItem Header="Apri DualPad" Click="OnTrayOpen" />
                     <MenuItem x:Name="TrayMapping" Header="Mappatura attiva" IsCheckable="True"
                               IsChecked="{Binding MappingEnabled, Mode=TwoWay}" />
+                    <MenuItem Header="Spegni controller" Click="OnTrayPowerOff" />
                     <Separator />
                     <MenuItem Header="Esci" Click="OnTrayExit" />
                 </ContextMenu>

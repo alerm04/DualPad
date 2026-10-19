@@ -15,6 +15,10 @@ public sealed record AppSettings
     /// <summary>Device instance ids already handed to HidHide, so we only ask for elevation once per controller.</summary>
     public List<string> HiddenDevices { get; init; } = [];
     public bool Notifications { get; init; } = true;
+    /// <summary>Turn off Bluetooth controllers when DualPad exits.</summary>
+    public bool PowerOffOnExit { get; init; } = true;
+    /// <summary>Run DualPad at high process priority so input is handled promptly under load.</summary>
+    public bool HighPriority { get; init; } = true;
     /// <summary>"System", "Dark" or "Light".</summary>
     public string Theme { get; init; } = "System";
 }

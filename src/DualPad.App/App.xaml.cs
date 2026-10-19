@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Threading;
 using DualPad.App.Services;
 using Wpf.Ui.Appearance;
@@ -13,6 +13,8 @@ public partial class App : Application
     private Mutex? _mutex;
     private EventWaitHandle? _showEvent;
     private bool _started;
+    private bool _snapshot;
+    private bool _restarting;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -20,6 +22,7 @@ public partial class App : Application
         {
             base.OnStartup(e);
             _started = true;
+            _snapshot = true;
             ApplyTheme(e.Args.Contains("--light") ? "Light" : "Dark");
             Snapshot.Run(e.Args[1], live: e.Args.Contains("--live"));
             return;
@@ -40,6 +43,7 @@ public partial class App : Application
         _started = true;
         var state = AppState.Instance;
         ApplyTheme(state.Settings.Theme);
+        state.ApplyProcessPriority();
 
         var window = new MainWindow();
         MainWindow = window;
@@ -61,6 +65,7 @@ public partial class App : Application
     public static void Restart()
     {
         var app = (App)Current;
+        app._restarting = true;
         app._mutex?.ReleaseMutex();
         app._mutex?.Dispose();
         app._mutex = null;
@@ -89,7 +94,12 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        if (_started) AppState.Instance.Dispose();
+        if (_started)
+        {
+            // Turn the controller off on a real exit, not when restarting or rendering snapshots.
+            var powerOff = !_snapshot && !_restarting && AppState.Instance.Settings.PowerOffOnExit;
+            AppState.Instance.Shutdown(powerOff);
+        }
         _mutex?.Dispose();
         base.OnExit(e);
     }
