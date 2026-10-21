@@ -1,0 +1,45 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Connect the controller over Bluetooth
+        2. Open the game…
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Connection
+      options: [USB, Bluetooth, Both]
+    validations:
+      required: true
+  - type: dropdown
+    id: controller
+    attributes:
+      label: Controller
+      options: [DualSense, DualSense Edge]
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Game or app
+      placeholder: e.g. Forza Horizon 5 (Game Pass)
+  - type: input
+    id: versions
+    attributes:
+      label: DualPad and Windows version
+      description: The DualPad version is under Settings › About.
+      placeholder: DualPad 1.1.0, Windows 11 24H2
+    validations:
+      required: true
