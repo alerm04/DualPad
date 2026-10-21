@@ -14,6 +14,7 @@ A modern, lightweight alternative to DS4Windows: one file, no installer, a clean
 ![Downloads](https://img.shields.io/github/downloads/alerm04/DualPad/total?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4?style=flat-square)
 ![Connection](https://img.shields.io/badge/USB%20%2B%20Bluetooth-supported-4ADE80?style=flat-square)
+[![VirusTotal](https://img.shields.io/badge/VirusTotal-0%2F69%20clean-4ADE80?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/6b432e3d1916872f8df5889c83255646fe9a4e1f2886468ce145e8b4f8e1933b)
 
 <img src="docs/remap.png" width="900" alt="DualPad visual button editor" />
 
@@ -73,6 +74,8 @@ In `%AppData%\DualPad`. Profiles are plain JSON files.
 Only when you click **Installa** for a driver: winget then downloads it from the official source.
 
 ## Verify your download
+
+Scanned on VirusTotal: **0 of 69 security vendors flagged the file** ([see the report](https://www.virustotal.com/gui/file/6b432e3d1916872f8df5889c83255646fe9a4e1f2886468ce145e8b4f8e1933b)).
 
 SHA-256 of `DualPad.exe` 1.0.0:
 
