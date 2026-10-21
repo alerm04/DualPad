@@ -45,6 +45,8 @@ A modern, lightweight alternative to DS4Windows: one file, no installer, a clean
 
 ## Screenshots
 
+<img src="docs/home.png" width="900" alt="DualPad home with a DualSense connected over Bluetooth" />
+
 | Touchpad and sticks | Lightbar and rumble |
 | --- | --- |
 | <img src="docs/touchpad-sticks.png" alt="Touchpad and stick settings" /> | <img src="docs/lightbar-rumble.png" alt="Lightbar and rumble settings" /> |
