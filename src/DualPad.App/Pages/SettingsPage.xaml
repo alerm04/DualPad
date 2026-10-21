@@ -64,8 +64,6 @@
             <Border Style="{StaticResource Panel}">
                 <StackPanel>
                     <TextBlock FontWeight="SemiBold" x:Name="VersionText" Text="DualPad" />
-                    <TextBlock Margin="0,6,0,0" Style="{StaticResource Caption}"
-                               Text="Ispirato a DS4Windows (Ryochan7 e contributori), studiato con REA. Usa i driver ViGEmBus e HidHide di Nefarius." />
                     <ui:Button Margin="0,12,0,0" Icon="{ui:SymbolIcon OpenFolder24}" Content="Apri cartella dei dati" Click="OnOpenData" />
                 </StackPanel>
             </Border>
