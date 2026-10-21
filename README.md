@@ -18,7 +18,7 @@ A free, open-source alternative to DS4Windows: one file, no installer, a clean W
 ![Connection](https://img.shields.io/badge/USB%20%2B%20Bluetooth-supported-4ADE80?style=flat-square)
 [![VirusTotal](https://img.shields.io/badge/VirusTotal-0%2F70%20clean-4ADE80?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/790384f887ed4c964d67f5ea2dce63cfa556c36cdecdfa2ae69f7bdb8ac0a62e)
 
-<img src="docs/remap.png" width="900" alt="DualPad visual button editor" />
+<img src="docs/demo.gif" width="820" alt="A DualSense connecting over Bluetooth: buttons, triggers and touchpad light up live in DualPad" />
 
 </div>
 
@@ -49,7 +49,7 @@ A free, open-source alternative to DS4Windows: one file, no installer, a clean W
 
 ## Screenshots
 
-<img src="docs/home.png" width="900" alt="DualPad home with a DualSense connected over Bluetooth" />
+<img src="docs/remap.png" width="900" alt="DualPad visual button editor" />
 
 | Touchpad and sticks | Lightbar and rumble |
 | --- | --- |
