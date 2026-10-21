@@ -1,51 +1,96 @@
+<div align="center">
+
+<img src="docs/icon.png" width="96" alt="DualPad icon" />
+
 # DualPad
 
-DualPad trasforma un controller **DualSense** (PS5), collegato via USB o Bluetooth, in un **controller Xbox 360 virtuale** per Windows. Il **touchpad funziona come mouse**. È un'alternativa moderna a DS4Windows, con un'interfaccia Fluent per Windows 11 e un editor visuale dei tasti.
+**Use your PS5 DualSense as an Xbox controller on Windows, with the touchpad as a mouse.**
 
-## Requisiti
+A modern, lightweight alternative to DS4Windows: one file, no installer, a clean Windows 11 interface and a visual button editor.
 
-- Windows 10/11 x64
-- [.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0)
-- Driver [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases/latest): crea il controller Xbox virtuale
-- Facoltativo: [HidHide](https://github.com/nefarius/HidHide/releases/latest), per nascondere il DualSense ai giochi ed evitare il doppio input
+[![Download](https://img.shields.io/badge/Download-DualPad.exe-3B8EFF?style=for-the-badge&logo=windows)](https://github.com/alerm04/DualPad/releases/latest/download/DualPad.exe)
 
-> Chiudi DS4Windows prima di avviare DualPad: se sono aperti entrambi, i giochi vedono due controller.
+![Release](https://img.shields.io/github/v/release/alerm04/DualPad?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/alerm04/DualPad/total?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4?style=flat-square)
+![Connection](https://img.shields.io/badge/USB%20%2B%20Bluetooth-supported-4ADE80?style=flat-square)
+[![VirusTotal](https://img.shields.io/badge/VirusTotal-0%2F69%20clean-4ADE80?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/6b432e3d1916872f8df5889c83255646fe9a4e1f2886468ce145e8b4f8e1933b)
 
-## Funzioni
+<img src="docs/remap.png" width="900" alt="DualPad visual button editor" />
 
-- **Layout Xbox predefinito**: ✕→A, ○→B, □→X, △→Y, L1/R1→LB/RB, L2/R2→LT/RT analogici, Crea→View, Options→Menu, PS→Xbox, L3/R3, croce direzionale e stick nelle posizioni Xbox
-- **Touchpad come mouse**: movimento con accelerazione, tocco = clic, tocco con due dita = clic destro, pressione sul lato destro = clic destro, scorrimento con due dita
-- **Editor visuale dei tasti**: clicchi il tasto sul disegno, oppure lo premi sul controller, e scegli un'azione Xbox, un tasto della tastiera o un'azione del mouse. Ogni tasto si ripristina con un clic
-- **Stick e grilletti**: zona morta radiale, curva di risposta, inversione dell'asse Y, stick come mouse; anteprime live
-- **Lightbar e LED**: colore libero o in base alla batteria, luminosità, numero del giocatore sui LED
-- **Vibrazione**: il rumble dei giochi arriva al DualSense, con intensità regolabile
-- **Profili**: profili multipli, da duplicare, rinominare, importare ed esportare (JSON in `%AppData%\DualPad\Profiles`)
-- **Area di notifica**: avvio con Windows, avvio ridotto a icona, notifiche di connessione e di batteria scarica
+</div>
 
-## Compilazione
+## Why DualPad
 
-```bash
-dotnet build
-dotnet test
-dotnet run --project src/DualPad.App
-```
+- **Works in every game**: DualPad creates a virtual Xbox 360 controller, so games that only support Xbox pads just work.
+- **Xbox layout out of the box**: ✕ → A, ○ → B, □ → X, △ → Y, L1/R1 → LB/RB, analog L2/R2 → LT/RT, Create → View, Options → Menu, PS → Xbox button. Sticks and D-pad sit where you expect them.
+- **Touchpad as a mouse**: move the cursor, tap to click, tap with two fingers or press the right half for a right click, and scroll with two fingers.
+- **Visual remapping**: click a button on the drawing, or just press it on the controller, then pick an Xbox button, a keyboard key or a mouse action. Every change can be undone with one click.
+- **USB and Bluetooth**: battery level, charging state and connection type are shown live.
+- **Lightbar, LEDs and rumble**: choose any color or let it follow the battery level, show the player number on the LEDs, and tune the rumble strength.
+- **Profiles**: one per game, and you can duplicate, import or export them.
+- **Low latency**: input is handled on a dedicated high-priority thread with no timers or queues. A built-in test measures what DualPad adds (about 1 ms in our tests).
+- **Tidy**: lives in the system tray, starts with Windows if you want, and can turn the controller off when it exits.
+- **Driver setup in one click**: required and optional drivers are installed from the settings through winget.
 
-Per un eseguibile da distribuire:
+## Download and run
 
-```bash
-dotnet publish src/DualPad.App -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish
-```
+1. Download **[DualPad.exe](https://github.com/alerm04/DualPad/releases/latest/download/DualPad.exe)**. It is a single file, and .NET is already included.
+2. Run it. If Windows SmartScreen shows *"Windows protected your PC"*, click **More info → Run anyway**. The warning appears because the app is not code-signed yet.
+3. Connect the DualSense with a USB-C cable, or pair it over Bluetooth by holding **Create + PS** until the light blinks.
+4. If the **ViGEmBus** driver is missing, DualPad tells you, and you can install it from **Impostazioni → Driver e componenti → Installa**.
 
-## Struttura
+> Close DS4Windows (or similar tools) before starting DualPad, otherwise games will see two controllers.
 
-| Progetto | Contenuto |
+**Requirements:** Windows 10/11 x64 and the [ViGEmBus](https://github.com/nefarius/ViGEmBus) driver, which can be installed from inside the app. [HidHide](https://github.com/nefarius/HidHide) is optional: it hides the PlayStation controller from games that would otherwise read it twice.
+
+## Screenshots
+
+<img src="docs/home.png" width="900" alt="DualPad home with a DualSense connected over Bluetooth" />
+
+| Touchpad and sticks | Lightbar and rumble |
 | --- | --- |
-| `src/DualPad.Core` | HID (SetupAPI/hid.dll), protocollo DualSense (report USB 0x01/0x02, Bluetooth 0x31 con CRC32), motore di mappatura, touchpad-mouse, uscita ViGEm, profili, HidHide |
-| `src/DualPad.App` | Interfaccia WPF + [WPF-UI](https://github.com/lepoco/wpfui): Home, Tasti, Touchpad e stick, Luci e vibrazione, Profili, Impostazioni |
-| `tests/DualPad.Core.Tests` | Test su parser, CRC, layout Xbox, touchpad e profili |
+| <img src="docs/touchpad-sticks.png" alt="Touchpad and stick settings" /> | <img src="docs/lightbar-rumble.png" alt="Lightbar and rumble settings" /> |
 
-`DualPad.exe --snapshot <cartella> [--live] [--light]` salva tutte le pagine come PNG, utile per controllare la grafica.
+| Latency test and power options | Drivers and components |
+| --- | --- |
+| <img src="docs/advanced.png" alt="Advanced page with latency test" /> | <img src="docs/drivers.png" alt="Driver installation" /> |
 
-## Crediti
+## FAQ
 
-Ispirato a [DS4Windows](https://github.com/Ryochan7/DS4Windows) (Ryochan7 e contributori). La struttura originale (lettura HID, `Xbox360OutDevice` su ViGEm, `DS4Touchpad`/`Mouse` per il cursore) è stata studiata con [REA](https://github.com/morluto/rea). Usa i driver ViGEmBus e HidHide di Nefarius.
+**Is the interface in English?**
+Not yet: the interface is in Italian for now. English is planned.
+
+**Does it support the DualSense Edge?**
+Yes. The extra Fn buttons and back paddles can be remapped too.
+
+**How much latency does it add?**
+On a Bluetooth DualSense we measured about 575 reports per second, around 0.01 ms of processing and about 1.2 ms for the virtual Xbox controller to deliver the state to games. A USB cable removes the Bluetooth link from the chain and gives the lowest total latency. You can run the test yourself under **Avanzate**.
+
+**Where are my settings stored?**
+In `%AppData%\DualPad`. Profiles are plain JSON files.
+
+**Does it connect to the internet?**
+Only when you click **Installa** for a driver: winget then downloads it from the official source.
+
+## Verify your download
+
+Scanned on VirusTotal: **0 of 69 security vendors flagged the file** ([see the report](https://www.virustotal.com/gui/file/6b432e3d1916872f8df5889c83255646fe9a4e1f2886468ce145e8b4f8e1933b)).
+
+SHA-256 of `DualPad.exe` 1.0.0:
+
+```
+6B432E3D1916872F8DF5889C83255646FE9A4E1F2886468CE145E8B4F8E1933B
+```
+
+```powershell
+Get-FileHash .\DualPad.exe -Algorithm SHA256
+```
+
+## Feedback
+
+Found a bug or want a feature? [Open an issue](https://github.com/alerm04/DualPad/issues). If DualPad is useful to you, a ⭐ helps other players find it.
+
+---
+
+DualPad is free to use. It is not affiliated with Sony or Microsoft. PlayStation, DualSense, Xbox and Windows are trademarks of their respective owners.
