@@ -16,7 +16,7 @@ A free, open-source alternative to DS4Windows: one file, no installer, a clean W
 [![License: MIT](https://img.shields.io/badge/license-MIT-4ADE80?style=flat-square)](LICENSE)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4?style=flat-square)
 ![Connection](https://img.shields.io/badge/USB%20%2B%20Bluetooth-supported-4ADE80?style=flat-square)
-[![VirusTotal](https://img.shields.io/badge/VirusTotal-0%2F70%20clean-4ADE80?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/790384f887ed4c964d67f5ea2dce63cfa556c36cdecdfa2ae69f7bdb8ac0a62e)
+[![VirusTotal](https://img.shields.io/badge/VirusTotal-report-4ADE80?style=flat-square&logo=virustotal)](https://www.virustotal.com/gui/file/11ef985edc512313eeb15509041cb22ecfb7a4156b2b11f64466bae788c83a6b)
 
 <img src="docs/demo.gif" width="860" alt="A real DualSense next to DualPad: it connects over Bluetooth and its light bar changes color live as colors are picked in the app" />
 
@@ -81,12 +81,12 @@ Only when you click **Install** for a driver: winget then downloads it from the 
 
 ## Verify your download
 
-Scanned on VirusTotal: **0 of 70 security vendors flagged the file** ([see the report](https://www.virustotal.com/gui/file/790384f887ed4c964d67f5ea2dce63cfa556c36cdecdfa2ae69f7bdb8ac0a62e)).
+Scanned on VirusTotal ([see the report](https://www.virustotal.com/gui/file/11ef985edc512313eeb15509041cb22ecfb7a4156b2b11f64466bae788c83a6b)).
 
-SHA-256 of `DualPad.exe` 1.1.0:
+SHA-256 of `DualPad.exe` 1.1.1:
 
 ```
-790384F887ED4C964D67F5EA2DCE63CFA556C36CDECDFA2AE69F7BDB8AC0A62E
+11EF985EDC512313EEB15509041CB22ECFB7A4156B2B11F64466BAE788C83A6B
 ```
 
 ```powershell
