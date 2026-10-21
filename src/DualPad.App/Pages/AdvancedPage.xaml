@@ -1,6 +1,7 @@
 <UserControl x:Class="DualPad.App.Pages.AdvancedPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:DualPad.App.Services"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <UserControl.Resources>
         <Style x:Key="TileValue" TargetType="TextBlock">
@@ -12,11 +13,11 @@
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="28,4,28,28" MaxWidth="1000" HorizontalAlignment="Left">
-            <TextBlock Style="{StaticResource PageTitle}" Text="Avanzate" />
-            <TextBlock Style="{StaticResource PageSubtitle}" Text="Spegnimento del controller, prestazioni e misura della latenza." />
+            <TextBlock Style="{StaticResource PageTitle}" Text="{l:T nav.advanced}" />
+            <TextBlock Style="{StaticResource PageSubtitle}" Text="{l:T advanced.subtitle}" />
 
             <!-- Latency test -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Test di latenza" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T advanced.latency}" />
             <Border Style="{StaticResource Panel}">
                 <StackPanel>
                     <Grid>
@@ -25,45 +26,45 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Text="Quanto ritardo aggiunge DualPad?" />
+                            <TextBlock FontWeight="SemiBold" Text="{l:T advanced.question}" />
                             <TextBlock Margin="0,4,0,0" Style="{StaticResource Caption}"
-                                       Text="Durante il test (10 secondi) muovi gli stick e premi i tasti. DualPad misura ogni quanto arrivano i dati dal controller, quanto impiega a elaborarli e quanto ci mette il controller Xbox virtuale a renderli leggibili ai giochi (tramite XInput, la stessa via usata dai giochi)." />
+                                       Text="{l:T advanced.explain}" />
                         </StackPanel>
                         <StackPanel Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Center">
-                            <ui:Button x:Name="StartTest" Appearance="Primary" Icon="{ui:SymbolIcon Play24}" Content="Avvia test" MinWidth="150" Click="OnStartTest" />
+                            <ui:Button x:Name="StartTest" Appearance="Primary" Icon="{ui:SymbolIcon Play24}" Content="{l:T advanced.start}" MinWidth="150" Click="OnStartTest" />
                             <TextBlock x:Name="LiveRate" Margin="0,8,0,0" HorizontalAlignment="Center" Style="{StaticResource Caption}" />
                         </StackPanel>
                     </Grid>
 
                     <ProgressBar x:Name="TestProgress" Margin="0,14,0,0" Height="6" Maximum="1" Visibility="Collapsed" />
                     <TextBlock x:Name="TestHint" Margin="0,8,0,0" Style="{StaticResource Caption}" FontSize="13" Visibility="Collapsed"
-                               Text="Muovi gli stick e premi i tasti…" />
+                               Text="{l:T advanced.hint}" />
 
                     <UniformGrid x:Name="Tiles" Columns="4" Margin="0,16,0,0" Visibility="Collapsed">
                         <Border Style="{StaticResource Panel}" Margin="0,0,8,0" Padding="14">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Frequenza dati" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.rate}" />
                                 <TextBlock x:Name="RateValue" Style="{StaticResource TileValue}" />
                                 <TextBlock x:Name="RateDetail" Style="{StaticResource Caption}" />
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource Panel}" Margin="4,0,4,0" Padding="14">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Regolarità (99% dei report)" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.jitter}" />
                                 <TextBlock x:Name="JitterValue" Style="{StaticResource TileValue}" />
                                 <TextBlock x:Name="JitterDetail" Style="{StaticResource Caption}" />
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource Panel}" Margin="4,0,4,0" Padding="14">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Elaborazione DualPad" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.processing}" />
                                 <TextBlock x:Name="ProcessingValue" Style="{StaticResource TileValue}" />
                                 <TextBlock x:Name="ProcessingDetail" Style="{StaticResource Caption}" />
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource Panel}" Margin="8,0,0,0" Padding="14">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Consegna al gioco" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.delivery}" />
                                 <TextBlock x:Name="DeliveryValue" Style="{StaticResource TileValue}" />
                                 <TextBlock x:Name="DeliveryDetail" Style="{StaticResource Caption}" />
                             </StackPanel>
@@ -72,47 +73,47 @@
 
                     <ui:InfoBar x:Name="Verdict" Margin="0,12,0,0" IsClosable="False" IsOpen="False" />
                     <TextBlock Margin="0,10,0,0" Style="{StaticResource Caption}"
-                               Text="Non misurabile via software: il tempo del collegamento radio Bluetooth e quello del gioco stesso. Per la latenza più bassa possibile usa il cavo USB-C." />
+                               Text="{l:T advanced.notMeasurable}" />
                 </StackPanel>
             </Border>
 
             <!-- Performance -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Prestazioni" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T advanced.performance}" />
             <ui:CardControl Icon="{ui:SymbolIcon Flash24}">
                 <ui:CardControl.Header>
                     <StackPanel>
-                        <TextBlock FontSize="14" Text="Priorità alta" />
+                        <TextBlock FontSize="14" Text="{l:T advanced.highPriority}" />
                         <TextBlock Style="{StaticResource Caption}"
-                                   Text="Windows dà precedenza a DualPad: l'input resta puntuale anche quando il gioco usa tutta la CPU." />
+                                   Text="{l:T advanced.highPriority.caption}" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch x:Name="HighPriority" Click="OnHighPriority" />
             </ui:CardControl>
             <Border Style="{StaticResource Panel}" Margin="0,6,0,0" Padding="16,12">
                 <StackPanel>
-                    <TextBlock FontWeight="SemiBold" Text="Già attivo in DualPad" />
+                    <TextBlock FontWeight="SemiBold" Text="{l:T advanced.already}" />
                     <TextBlock Margin="0,4,0,0" Style="{StaticResource Caption}"
-                               Text="• Thread di lettura dedicato a priorità massima: ogni report viene mappato e inviato subito, senza timer né code." />
-                    <TextBlock Style="{StaticResource Caption}" Text="• Coda del driver ridotta al minimo: non vengono mai letti report vecchi." />
-                    <TextBlock Style="{StaticResource Caption}" Text="• Il controller Xbox virtuale viene aggiornato solo quando qualcosa cambia." />
+                               Text="{l:T advanced.already1}" />
+                    <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.already2}" />
+                    <TextBlock Style="{StaticResource Caption}" Text="{l:T advanced.already3}" />
                     <TextBlock x:Name="ConnectionTip" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource BrandBrush}" TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 
             <!-- Controller power -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Controller" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T advanced.controller}" />
             <ui:CardControl Icon="{ui:SymbolIcon Power24}">
                 <ui:CardControl.Header>
                     <StackPanel>
-                        <TextBlock FontSize="14" Text="Spegni il controller quando chiudi DualPad" />
+                        <TextBlock FontSize="14" Text="{l:T advanced.powerOffOnExit}" />
                         <TextBlock Style="{StaticResource Caption}"
-                                   Text="Vale per il Bluetooth. Via USB il controller resta alimentato dal cavo, quindi non si può spegnere." />
+                                   Text="{l:T advanced.powerOffOnExit.caption}" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch x:Name="PowerOffOnExit" Click="OnPowerOffOnExit" />
             </ui:CardControl>
             <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                <ui:Button x:Name="PowerOffNow" Icon="{ui:SymbolIcon Power24}" Content="Spegni il controller ora" Click="OnPowerOffNow" />
+                <ui:Button x:Name="PowerOffNow" Icon="{ui:SymbolIcon Power24}" Content="{l:T advanced.powerOffNow}" Click="OnPowerOffNow" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

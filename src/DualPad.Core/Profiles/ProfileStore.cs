@@ -21,6 +21,8 @@ public sealed record AppSettings
     public bool HighPriority { get; init; } = true;
     /// <summary>"System", "Dark" or "Light".</summary>
     public string Theme { get; init; } = "System";
+    /// <summary>UI language code such as "en" or "pt-BR"; empty follows Windows.</summary>
+    public string Language { get; init; } = "";
 }
 
 /// <summary>Stores profiles as JSON files under %AppData%\DualPad.</summary>
@@ -118,7 +120,7 @@ public sealed class ProfileStore
     private string PathFor(string name)
     {
         var safe = string.Concat(name.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c)).Trim();
-        if (safe.Length == 0) safe = "Profilo";
+        if (safe.Length == 0) safe = "Profile";
         return Path.Combine(_profilesDir, safe + ".json");
     }
 

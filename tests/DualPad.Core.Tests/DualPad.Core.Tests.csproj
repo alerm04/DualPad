@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\src\DualPad.Core\DualPad.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\src\DualPad.App\Localization\*.json" LinkBase="Localization" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

@@ -5,34 +5,34 @@ using DualPad.Core.Mapping;
 
 namespace DualPad.App.Services;
 
-/// <summary>Italian display names and colors for controls and actions.</summary>
+/// <summary>Display names (translated through <see cref="Loc"/>) and colors for controls and actions.</summary>
 public static class Labels
 {
     public static string Name(DsButtons button) => button switch
     {
-        DsButtons.Cross => "Croce",
-        DsButtons.Circle => "Cerchio",
-        DsButtons.Square => "Quadrato",
-        DsButtons.Triangle => "Triangolo",
+        DsButtons.Cross => Loc.T("ds.cross"),
+        DsButtons.Circle => Loc.T("ds.circle"),
+        DsButtons.Square => Loc.T("ds.square"),
+        DsButtons.Triangle => Loc.T("ds.triangle"),
         DsButtons.L1 => "L1",
         DsButtons.R1 => "R1",
-        DsButtons.L2 => "L2 (grilletto)",
-        DsButtons.R2 => "R2 (grilletto)",
-        DsButtons.Create => "Crea",
+        DsButtons.L2 => Loc.T("ds.l2"),
+        DsButtons.R2 => Loc.T("ds.r2"),
+        DsButtons.Create => Loc.T("ds.create"),
         DsButtons.Options => "Options",
-        DsButtons.L3 => "L3 (stick sinistro)",
-        DsButtons.R3 => "R3 (stick destro)",
-        DsButtons.PS => "Tasto PS",
-        DsButtons.TouchpadClick => "Clic touchpad",
-        DsButtons.Mute => "Microfono",
-        DsButtons.DpadUp => "Croce direzionale su",
-        DsButtons.DpadDown => "Croce direzionale giù",
-        DsButtons.DpadLeft => "Croce direzionale sinistra",
-        DsButtons.DpadRight => "Croce direzionale destra",
-        DsButtons.LeftFn => "Fn sinistro (Edge)",
-        DsButtons.RightFn => "Fn destro (Edge)",
-        DsButtons.LeftPaddle => "Levetta posteriore sinistra (Edge)",
-        DsButtons.RightPaddle => "Levetta posteriore destra (Edge)",
+        DsButtons.L3 => Loc.T("ds.l3"),
+        DsButtons.R3 => Loc.T("ds.r3"),
+        DsButtons.PS => Loc.T("ds.ps"),
+        DsButtons.TouchpadClick => Loc.T("ds.touchpad"),
+        DsButtons.Mute => Loc.T("ds.mute"),
+        DsButtons.DpadUp => Loc.T("ds.dpadUp"),
+        DsButtons.DpadDown => Loc.T("ds.dpadDown"),
+        DsButtons.DpadLeft => Loc.T("ds.dpadLeft"),
+        DsButtons.DpadRight => Loc.T("ds.dpadRight"),
+        DsButtons.LeftFn => Loc.T("ds.leftFn"),
+        DsButtons.RightFn => Loc.T("ds.rightFn"),
+        DsButtons.LeftPaddle => Loc.T("ds.leftPaddle"),
+        DsButtons.RightPaddle => Loc.T("ds.rightPaddle"),
         _ => button.ToString(),
     };
 
@@ -53,7 +53,7 @@ public static class Labels
         DsButtons.PS => "PS",
         DsButtons.TouchpadClick => "TP",
         DsButtons.Mute => "🎙",
-        DsButtons.Create => "Crea",
+        DsButtons.Create => Loc.T("ds.create.short"),
         DsButtons.Options => "Opt",
         DsButtons.LeftFn => "Fn",
         DsButtons.RightFn => "Fn",
@@ -95,20 +95,20 @@ public static class Labels
 
     public static string Description(XboxControl control) => control switch
     {
-        XboxControl.LeftBumper => "Dorsale sinistro",
-        XboxControl.RightBumper => "Dorsale destro",
-        XboxControl.LeftTrigger => "Grilletto sinistro",
-        XboxControl.RightTrigger => "Grilletto destro",
-        XboxControl.Back => "Visualizza",
-        XboxControl.Start => "Menu",
-        XboxControl.Guide => "Pulsante Xbox",
-        XboxControl.LeftThumb => "Pressione stick sinistro",
-        XboxControl.RightThumb => "Pressione stick destro",
-        XboxControl.DpadUp => "Croce su",
-        XboxControl.DpadDown => "Croce giù",
-        XboxControl.DpadLeft => "Croce sinistra",
-        XboxControl.DpadRight => "Croce destra",
-        _ => "Pulsante " + Name(control),
+        XboxControl.LeftBumper => Loc.T("xbox.lb"),
+        XboxControl.RightBumper => Loc.T("xbox.rb"),
+        XboxControl.LeftTrigger => Loc.T("xbox.lt"),
+        XboxControl.RightTrigger => Loc.T("xbox.rt"),
+        XboxControl.Back => Loc.T("xbox.back"),
+        XboxControl.Start => Loc.T("xbox.start"),
+        XboxControl.Guide => Loc.T("xbox.guide"),
+        XboxControl.LeftThumb => Loc.T("xbox.ls"),
+        XboxControl.RightThumb => Loc.T("xbox.rs"),
+        XboxControl.DpadUp => Loc.T("xbox.dpadUp"),
+        XboxControl.DpadDown => Loc.T("xbox.dpadDown"),
+        XboxControl.DpadLeft => Loc.T("xbox.dpadLeft"),
+        XboxControl.DpadRight => Loc.T("xbox.dpadRight"),
+        _ => Loc.T("xbox.button", Name(control)),
     };
 
     public static Color XboxColor(XboxControl control) => control switch
@@ -123,23 +123,23 @@ public static class Labels
 
     public static string Name(MouseAction action) => action switch
     {
-        MouseAction.LeftClick => "Clic sinistro",
-        MouseAction.RightClick => "Clic destro",
-        MouseAction.MiddleClick => "Clic centrale",
-        MouseAction.Back => "Indietro",
-        MouseAction.Forward => "Avanti",
-        MouseAction.WheelUp => "Rotella su",
-        MouseAction.WheelDown => "Rotella giù",
+        MouseAction.LeftClick => Loc.T("mouse.left"),
+        MouseAction.RightClick => Loc.T("mouse.right"),
+        MouseAction.MiddleClick => Loc.T("mouse.middle"),
+        MouseAction.Back => Loc.T("mouse.back"),
+        MouseAction.Forward => Loc.T("mouse.forward"),
+        MouseAction.WheelUp => Loc.T("mouse.wheelUp"),
+        MouseAction.WheelDown => Loc.T("mouse.wheelDown"),
         _ => action.ToString(),
     };
 
     public static string Short(MouseAction action) => action switch
     {
-        MouseAction.LeftClick => "Clic sx",
-        MouseAction.RightClick => "Clic dx",
-        MouseAction.MiddleClick => "Clic cent.",
-        MouseAction.WheelUp => "Rotella ↑",
-        MouseAction.WheelDown => "Rotella ↓",
+        MouseAction.LeftClick => Loc.T("mouse.short.left"),
+        MouseAction.RightClick => Loc.T("mouse.short.right"),
+        MouseAction.MiddleClick => Loc.T("mouse.short.middle"),
+        MouseAction.WheelUp => Loc.T("mouse.short.wheelUp"),
+        MouseAction.WheelDown => Loc.T("mouse.short.wheelDown"),
         _ => Name(action),
     };
 
@@ -148,39 +148,39 @@ public static class Labels
         var key = KeyInterop.KeyFromVirtualKey(virtualKey);
         return key switch
         {
-            Key.Space => "Spazio",
-            Key.Enter => "Invio",
+            Key.Space => Loc.T("key.space"),
+            Key.Enter => Loc.T("key.enter"),
             Key.Escape => "Esc",
-            Key.Back => "Backspace",
+            Key.Back => Loc.T("key.backspace"),
             Key.Tab => "Tab",
-            Key.LeftShift => "Shift sx",
-            Key.RightShift => "Shift dx",
-            Key.LeftCtrl => "Ctrl sx",
-            Key.RightCtrl => "Ctrl dx",
+            Key.LeftShift => Loc.T("key.lshift"),
+            Key.RightShift => Loc.T("key.rshift"),
+            Key.LeftCtrl => Loc.T("key.lctrl"),
+            Key.RightCtrl => Loc.T("key.rctrl"),
             Key.LeftAlt => "Alt",
-            Key.RightAlt => "Alt Gr",
+            Key.RightAlt => Loc.T("key.altgr"),
             Key.LWin or Key.RWin => "Win",
-            Key.Up => "Freccia ↑",
-            Key.Down => "Freccia ↓",
-            Key.Left => "Freccia ←",
-            Key.Right => "Freccia →",
-            Key.PageUp => "Pag ↑",
-            Key.PageDown => "Pag ↓",
-            Key.Delete => "Canc",
-            Key.Insert => "Ins",
-            Key.Home => "Home",
-            Key.End => "Fine",
-            Key.Capital => "Bloc Maiusc",
-            Key.PrintScreen => "Stamp",
-            Key.MediaPlayPause => "Play/Pausa",
-            Key.MediaNextTrack => "Traccia succ.",
-            Key.MediaPreviousTrack => "Traccia prec.",
-            Key.VolumeUp => "Volume +",
-            Key.VolumeDown => "Volume −",
-            Key.VolumeMute => "Muto",
+            Key.Up => Loc.T("key.up"),
+            Key.Down => Loc.T("key.down"),
+            Key.Left => Loc.T("key.left"),
+            Key.Right => Loc.T("key.right"),
+            Key.PageUp => Loc.T("key.pageUp"),
+            Key.PageDown => Loc.T("key.pageDown"),
+            Key.Delete => Loc.T("key.delete"),
+            Key.Insert => Loc.T("key.insert"),
+            Key.Home => Loc.T("key.home"),
+            Key.End => Loc.T("key.end"),
+            Key.Capital => Loc.T("key.capsLock"),
+            Key.PrintScreen => Loc.T("key.printScreen"),
+            Key.MediaPlayPause => Loc.T("key.playPause"),
+            Key.MediaNextTrack => Loc.T("key.nextTrack"),
+            Key.MediaPreviousTrack => Loc.T("key.prevTrack"),
+            Key.VolumeUp => Loc.T("key.volumeUp"),
+            Key.VolumeDown => Loc.T("key.volumeDown"),
+            Key.VolumeMute => Loc.T("key.volumeMute"),
             >= Key.D0 and <= Key.D9 => ((char)('0' + (key - Key.D0))).ToString(),
-            >= Key.NumPad0 and <= Key.NumPad9 => "Num " + (key - Key.NumPad0),
-            Key.None => $"Tasto {virtualKey}",
+            >= Key.NumPad0 and <= Key.NumPad9 => Loc.T("key.numpad", key - Key.NumPad0),
+            Key.None => Loc.T("key.code", virtualKey),
             _ => key.ToString(),
         };
     }
@@ -196,10 +196,10 @@ public static class Labels
 
     public static string Long(ButtonAction action) => action.Kind switch
     {
-        ActionKind.Xbox => "Xbox · " + Description(action.Xbox),
-        ActionKind.Keyboard => "Tastiera · " + KeyName(action.Key),
-        ActionKind.Mouse => "Mouse · " + Name(action.Mouse),
-        _ => "Nessuna azione",
+        ActionKind.Xbox => Loc.T("action.xbox", Description(action.Xbox)),
+        ActionKind.Keyboard => Loc.T("action.keyboard", KeyName(action.Key)),
+        ActionKind.Mouse => Loc.T("action.mouse", Name(action.Mouse)),
+        _ => Loc.T("action.none"),
     };
 
     public static Color BadgeColor(ButtonAction action) => action.Kind switch

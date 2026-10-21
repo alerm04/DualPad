@@ -10,18 +10,18 @@ namespace DualPad.App.Pages;
 
 public partial class LightsPage : UserControl
 {
-    private static readonly (string Name, Color Color)[] Presets =
+    private static readonly (string NameKey, Color Color)[] Presets =
     [
-        ("Blu PlayStation", Color.FromRgb(0x00, 0x78, 0xFF)),
-        ("Azzurro", Color.FromRgb(0x00, 0xC8, 0xFF)),
-        ("Verde Xbox", Color.FromRgb(0x10, 0xD0, 0x10)),
-        ("Viola", Color.FromRgb(0x8B, 0x3C, 0xFF)),
-        ("Rosa", Color.FromRgb(0xFF, 0x3C, 0xB4)),
-        ("Rosso", Color.FromRgb(0xFF, 0x20, 0x20)),
-        ("Arancione", Color.FromRgb(0xFF, 0x80, 0x00)),
-        ("Giallo", Color.FromRgb(0xFF, 0xD0, 0x00)),
-        ("Bianco", Color.FromRgb(0xFF, 0xFF, 0xFF)),
-        ("Spenta", Color.FromRgb(0x00, 0x00, 0x00)),
+        ("color.psBlue", Color.FromRgb(0x00, 0x78, 0xFF)),
+        ("color.lightBlue", Color.FromRgb(0x00, 0xC8, 0xFF)),
+        ("color.xboxGreen", Color.FromRgb(0x10, 0xD0, 0x10)),
+        ("color.purple", Color.FromRgb(0x8B, 0x3C, 0xFF)),
+        ("color.pink", Color.FromRgb(0xFF, 0x3C, 0xB4)),
+        ("color.red", Color.FromRgb(0xFF, 0x20, 0x20)),
+        ("color.orange", Color.FromRgb(0xFF, 0x80, 0x00)),
+        ("color.yellow", Color.FromRgb(0xFF, 0xD0, 0x00)),
+        ("color.white", Color.FromRgb(0xFF, 0xFF, 0xFF)),
+        ("color.off", Color.FromRgb(0x00, 0x00, 0x00)),
     ];
 
     private bool _loading;
@@ -30,7 +30,7 @@ public partial class LightsPage : UserControl
     public LightsPage()
     {
         InitializeComponent();
-        foreach (var (name, color) in Presets)
+        foreach (var (nameKey, color) in Presets)
         {
             var swatch = new Border
             {
@@ -42,7 +42,7 @@ public partial class LightsPage : UserControl
                 BorderBrush = new SolidColorBrush(Color.FromArgb(0x60, 0x80, 0x80, 0x80)),
                 BorderThickness = new Thickness(2),
                 Cursor = Cursors.Hand,
-                ToolTip = name,
+                ToolTip = Loc.T(nameKey),
             };
             swatch.MouseLeftButtonUp += (_, _) => SetColor(color);
             Swatches.Children.Add(swatch);
@@ -95,7 +95,7 @@ public partial class LightsPage : UserControl
         ValueR.Text = $"{(int)SliderR.Value}";
         ValueG.Text = $"{(int)SliderG.Value}";
         ValueB.Text = $"{(int)SliderB.Value}";
-        HexText.Text = ShowBattery.IsChecked == true ? "batteria" : $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        HexText.Text = ShowBattery.IsChecked == true ? Loc.T("lights.batteryPreview") :$"#{color.R:X2}{color.G:X2}{color.B:X2}";
         var shown = ShowBattery.IsChecked == true ? Color.FromRgb(40, 220, 90) : color;
         PreviewGlow.Background = new SolidColorBrush(shown);
         PreviewShadow.Color = shown;

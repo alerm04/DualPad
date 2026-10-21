@@ -36,10 +36,10 @@ public partial class HomePage : UserControl
         if (session is null)
         {
             ConnectionIcon.Symbol = SymbolRegular.PlugDisconnected24;
-            ConnectionText.Text = state.IsControllerBlocked ? "Occupato da un'altra app" : "Non collegato";
+            ConnectionText.Text = Loc.T(state.IsControllerBlocked ? "home.busy" : "home.notConnected");
             BatteryText.Text = "—";
             BatteryBar.Value = 0;
-            XboxText.Text = state.IsViGEmInstalled ? "In attesa del controller" : "Driver non installato";
+            XboxText.Text = Loc.T(state.IsViGEmInstalled ? "home.xbox.waiting" : "home.xbox.noDriver");
             return;
         }
 
@@ -50,8 +50,8 @@ public partial class HomePage : UserControl
 
         BatteryText.Text = s.Charge switch
         {
-            ChargeState.Charging => $"{s.Battery}% · in carica",
-            ChargeState.Full => "Carica completa",
+            ChargeState.Charging => Loc.T("home.charging", s.Battery),
+            ChargeState.Full => Loc.T("home.full"),
             _ => $"{s.Battery}%",
         };
         BatteryBar.Value = s.Battery;
@@ -64,9 +64,10 @@ public partial class HomePage : UserControl
             _ => SymbolRegular.Battery924,
         };
 
-        if (session.Xbox is null) XboxText.Text = session.XboxError ?? "Non disponibile";
-        else if (!state.MappingEnabled) XboxText.Text = "In pausa";
-        else XboxText.Text = session.Xbox.PlayerIndex >= 0 ? $"Attivo · Giocatore {session.Xbox.PlayerIndex + 1}" : "Attivo";
+        XboxText.ToolTip = session.XboxError;
+        if (session.Xbox is null) XboxText.Text = Loc.T(state.IsViGEmInstalled ? "home.xbox.failed" : "home.xbox.noDriver");
+        else if (!state.MappingEnabled) XboxText.Text = Loc.T("home.xbox.paused");
+        else XboxText.Text = session.Xbox.PlayerIndex >= 0 ? Loc.T("home.xbox.activePlayer", session.Xbox.PlayerIndex + 1) : Loc.T("home.xbox.active");
     }
 
     private void OnEditMapping(object sender, RoutedEventArgs e) => (Window.GetWindow(this) as MainWindow)?.GoTo("mapping");

@@ -88,14 +88,14 @@ public partial class ProfilesPage : UserControl
                 CornerRadius = new CornerRadius(8),
                 Background = (Brush)FindResource("BrandBrush"),
                 VerticalAlignment = VerticalAlignment.Center,
-                Child = new TextBlock { Text = "Attivo", Foreground = Brushes.White, FontSize = 11, FontWeight = FontWeights.SemiBold },
+                Child = new TextBlock { Text = Loc.T("profiles.active"), Foreground = Brushes.White, FontSize = 11, FontWeight = FontWeights.SemiBold },
             });
         }
         info.Children.Add(nameRow);
-        var touch = profile.Touchpad.Mode == TouchpadMode.Mouse ? "touchpad come mouse" : "touchpad disattivato";
+        var touch = Loc.T(profile.Touchpad.Mode == TouchpadMode.Mouse ? "profiles.touchMouse" : "profiles.touchOff");
         info.Children.Add(new TextBlock
         {
-            Text = (changed == 0 ? "Layout Xbox standard" : $"{changed} tasti personalizzati") + " · " + touch,
+            Text = (changed == 0 ? Loc.T("profiles.standard") : Loc.T("profiles.changed", changed)) + " · " + touch,
             Style = (Style)FindResource("Caption"),
             Margin = new Thickness(0, 2, 0, 0),
         });
@@ -103,12 +103,12 @@ public partial class ProfilesPage : UserControl
 
         var actions = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
         Grid.SetColumn(actions, 2);
-        if (!isActive) actions.Children.Add(MakeButton("Usa", SymbolRegular.Checkmark24, () => state.ActiveProfile = profile, primary: true));
-        actions.Children.Add(MakeButton("Rinomina", SymbolRegular.Edit24, () => BeginRename(name, editor, profile)));
-        actions.Children.Add(MakeButton("Duplica", SymbolRegular.Copy24, () => state.CreateProfile(profile.Name + " copia", profile)));
-        actions.Children.Add(MakeButton("Esporta", SymbolRegular.ArrowExport24, () => Export(profile)));
+        if (!isActive) actions.Children.Add(MakeButton(Loc.T("profiles.use"), SymbolRegular.Checkmark24, () => state.ActiveProfile = profile, primary: true));
+        actions.Children.Add(MakeButton(Loc.T("profiles.rename"), SymbolRegular.Edit24, () => BeginRename(name, editor, profile)));
+        actions.Children.Add(MakeButton(Loc.T("profiles.duplicate"), SymbolRegular.Copy24, () => state.CreateProfile(Loc.T("profiles.copyName", profile.Name), profile)));
+        actions.Children.Add(MakeButton(Loc.T("profiles.export"), SymbolRegular.ArrowExport24, () => Export(profile)));
         if (state.Profiles.Count > 1)
-            actions.Children.Add(MakeButton("Elimina", SymbolRegular.Delete24, () => Delete(profile)));
+            actions.Children.Add(MakeButton(Loc.T("profiles.delete"), SymbolRegular.Delete24, () => Delete(profile)));
         grid.Children.Add(actions);
 
         return new Border
@@ -166,29 +166,29 @@ public partial class ProfilesPage : UserControl
 
     private static void Delete(Profile profile)
     {
-        var result = System.Windows.MessageBox.Show($"Eliminare il profilo \"{profile.Name}\"?", "Elimina profilo",
+        var result = System.Windows.MessageBox.Show(Loc.T("profiles.delete.confirm", profile.Name), Loc.T("profiles.delete.title"),
             MessageBoxButton.YesNo, MessageBoxImage.Warning);
         if (result == MessageBoxResult.Yes) AppState.Instance.DeleteProfile(profile);
     }
 
     private static void Export(Profile profile)
     {
-        var dialog = new SaveFileDialog { FileName = profile.Name + ".json", Filter = "Profilo DualPad (*.json)|*.json" };
+        var dialog = new SaveFileDialog { FileName = profile.Name + ".json", Filter = Loc.T("profiles.fileFilter") };
         if (dialog.ShowDialog() == true) AppState.Instance.Store.Export(profile, dialog.FileName);
     }
 
     private void OnNew(object sender, RoutedEventArgs e)
     {
-        var profile = AppState.Instance.CreateProfile("Nuovo profilo");
+        var profile = AppState.Instance.CreateProfile(Loc.T("profiles.newName"));
         AppState.Instance.ActiveProfile = profile;
     }
 
     private void OnImport(object sender, RoutedEventArgs e)
     {
-        var dialog = new OpenFileDialog { Filter = "Profilo DualPad (*.json)|*.json" };
+        var dialog = new OpenFileDialog { Filter = Loc.T("profiles.fileFilter") };
         if (dialog.ShowDialog() != true) return;
         if (AppState.Instance.ImportProfile(dialog.FileName) is null)
-            System.Windows.MessageBox.Show("Il file non è un profilo DualPad valido.", "Importa profilo", MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(Loc.T("profiles.import.invalid"), Loc.T("profiles.import.title"), MessageBoxButton.OK, MessageBoxImage.Warning);
     }
 
     private void OnOpenFolder(object sender, RoutedEventArgs e) =>

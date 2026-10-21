@@ -67,25 +67,24 @@ public partial class MainWindow : FluentWindow
         {
             var s = session.State;
             var connection = session.Device.Connection == ConnectionType.Bluetooth ? "Bluetooth" : "USB";
-            var charge = s.Charge == ChargeState.Charging ? " · in carica" : "";
             StatusTitle.Text = session.Device.IsEdge ? "DualSense Edge" : "DualSense";
-            StatusDetail.Text = $"{connection} · batteria {s.Battery}%{charge}";
+            StatusDetail.Text = Loc.T(s.Charge == ChargeState.Charging ? "status.detailCharging" : "status.detail", connection, s.Battery);
             StatusDot.Fill = state.MappingEnabled ? Brushes.LimeGreen : Brushes.Orange;
             Tray.TooltipText = $"DualPad · {StatusTitle.Text} {connection} · {s.Battery}%";
         }
         else if (state.IsControllerBlocked)
         {
-            StatusTitle.Text = "Controller occupato";
-            StatusDetail.Text = "Chiudi DS4Windows o altre app";
+            StatusTitle.Text = Loc.T("status.blocked.title");
+            StatusDetail.Text = Loc.T("status.blocked.detail");
             StatusDot.Fill = Brushes.OrangeRed;
-            Tray.TooltipText = "DualPad · controller usato da un'altra app";
+            Tray.TooltipText = Loc.T("tray.blocked");
         }
         else
         {
-            StatusTitle.Text = "Nessun controller";
-            StatusDetail.Text = "In attesa del DualSense…";
+            StatusTitle.Text = Loc.T("status.none.title");
+            StatusDetail.Text = Loc.T("status.none.detail");
             StatusDot.Fill = new SolidColorBrush(Color.FromRgb(0x6B, 0x72, 0x80));
-            Tray.TooltipText = "DualPad · nessun controller";
+            Tray.TooltipText = Loc.T("tray.none");
         }
     }
 

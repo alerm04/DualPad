@@ -29,4 +29,8 @@
     <Resource Include="Assets\dualpad.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\*.json" LogicalName="DualPad.App.Localization.%(Filename)%(Extension)" />
+  </ItemGroup>
+
 </Project>

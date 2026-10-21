@@ -40,12 +40,12 @@ public sealed partial class AppState : ObservableObject, IDisposable
         Service.SessionsChanged += () => OnUi(RefreshSessions);
         Service.ControllerConnected += s => OnUi(() =>
         {
-            Notify?.Invoke("Controller connesso",
-                s.Device.Connection == Core.DualSense.ConnectionType.Bluetooth ? "DualSense collegato via Bluetooth" : "DualSense collegato via USB");
+            Notify?.Invoke(Loc.T("notify.connected.title"),
+                Loc.T(s.Device.Connection == Core.DualSense.ConnectionType.Bluetooth ? "notify.connected.bt" : "notify.connected.usb"));
             if (Settings.HideControllerWithHidHide) HideControllers();
         });
-        Service.ControllerDisconnected += _ => OnUi(() => Notify?.Invoke("Controller disconnesso", "Il DualSense non è più collegato"));
-        Service.LowBattery += (_, level) => OnUi(() => Notify?.Invoke("Batteria scarica", $"Batteria del controller al {level}%"));
+        Service.ControllerDisconnected += _ => OnUi(() => Notify?.Invoke(Loc.T("notify.disconnected.title"), Loc.T("notify.disconnected.text")));
+        Service.LowBattery += (_, level) => OnUi(() => Notify?.Invoke(Loc.T("notify.lowBattery.title"), Loc.T("notify.lowBattery.text", level)));
 
         _saveTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
         _saveTimer.Tick += (_, _) => FlushSave();
@@ -165,7 +165,7 @@ public sealed partial class AppState : ObservableObject, IDisposable
         var appPath = Environment.ProcessPath ?? "";
         var ok = await Task.Run(() => Core.Output.HidHideService.Hide(ids, appPath));
         if (ok) UpdateSettings(s => s with { HiddenDevices = [.. s.HiddenDevices.Union(ids)] });
-        else Notify?.Invoke("HidHide", "Non è stato possibile nascondere il controller (permesso negato?)");
+        else Notify?.Invoke("HidHide", Loc.T("notify.hidhide.failed"));
     }
 
     /// <summary>Makes every controller DualPad hid visible to games again.</summary>

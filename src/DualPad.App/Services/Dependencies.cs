@@ -13,11 +13,11 @@ public enum DependencyKind { DotNetRuntime, ViGEmBus, HidHide }
 public sealed record Dependency(
     DependencyKind Kind,
     string Name,
-    string Description,
+    string DescriptionKey,
     bool Required,
     string WingetId,
     string InfoUrl,
-    string AfterInstall);
+    string AfterInstallKey);
 
 public sealed record DependencyStatus(bool Installed, string? Version);
 
@@ -32,18 +32,12 @@ public static class Dependencies
 
     private static readonly Dependency[] Catalog =
     [
-        new(DependencyKind.ViGEmBus, "ViGEmBus",
-            "Driver che crea il controller Xbox 360 virtuale. Senza di esso i giochi non vedono il controller.",
-            Required: true, "ViGEm.ViGEmBus", "https://github.com/nefarius/ViGEmBus/releases/latest",
-            "Riavvia DualPad per attivare il controller Xbox."),
-        new(DependencyKind.DotNetRuntime, ".NET 9 Desktop Runtime",
-            "Il runtime Microsoft su cui gira DualPad. Aggiornarlo porta correzioni di sicurezza e prestazioni.",
-            Required: true, "Microsoft.DotNet.DesktopRuntime.9", "https://dotnet.microsoft.com/download/dotnet/9.0",
-            "Riavvia DualPad per usare la nuova versione."),
-        new(DependencyKind.HidHide, "HidHide",
-            "Nasconde il DualSense ai giochi che lo leggono anche direttamente, così non ricevono il doppio input.",
-            Required: false, "Nefarius.HidHide", "https://github.com/nefarius/HidHide/releases/latest",
-            "Riavvia il PC per completare l'installazione del driver."),
+        new(DependencyKind.ViGEmBus, "ViGEmBus", "dep.vigem.desc",
+            Required: true, "ViGEm.ViGEmBus", "https://github.com/nefarius/ViGEmBus/releases/latest", "dep.vigem.after"),
+        new(DependencyKind.DotNetRuntime, ".NET 9 Desktop Runtime", "dep.dotnet.desc",
+            Required: true, "Microsoft.DotNet.DesktopRuntime.9", "https://dotnet.microsoft.com/download/dotnet/9.0", "dep.dotnet.after"),
+        new(DependencyKind.HidHide, "HidHide", "dep.hidhide.desc",
+            Required: false, "Nefarius.HidHide", "https://github.com/nefarius/HidHide/releases/latest", "dep.hidhide.after"),
     ];
 
     /// <summary>
@@ -73,7 +67,7 @@ public static class Dependencies
         if (winget is null)
         {
             OpenUrl(dependency.InfoUrl);
-            return new(false, "winget non è disponibile: ho aperto la pagina di download.");
+            return new(false, Loc.T("dep.noWinget"));
         }
 
         var info = new ProcessStartInfo(winget)
@@ -107,14 +101,14 @@ public static class Dependencies
 
             return process.ExitCode switch
             {
-                0 => new(true, "Installazione completata. " + dependency.AfterInstall),
-                NoApplicableUpgrade or AlreadyInstalled => new(true, "È già installata l'ultima versione."),
-                _ => new(false, $"Installazione non riuscita (codice 0x{process.ExitCode:X8}). {lastLine}".Trim()),
+                0 => new(true, Loc.T("dep.success", Loc.T(dependency.AfterInstallKey))),
+                NoApplicableUpgrade or AlreadyInstalled => new(true, Loc.T("dep.upToDate")),
+                _ => new(false, Loc.T("dep.failed", process.ExitCode.ToString("X8"), lastLine).Trim()),
             };
         }
         catch (Win32Exception ex)
         {
-            return new(false, "Impossibile avviare winget: " + ex.Message);
+            return new(false, Loc.T("dep.cantStart", ex.Message));
         }
     }
 

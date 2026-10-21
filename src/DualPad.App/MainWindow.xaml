@@ -1,6 +1,7 @@
 <ui:FluentWindow x:Class="DualPad.App.MainWindow"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:DualPad.App.Services"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:tray="http://schemas.lepo.co/wpfui/2022/xaml/tray"
                  Title="DualPad"
@@ -34,37 +35,37 @@
                     <RadioButton x:Name="NavHome" Style="{StaticResource NavButton}" Tag="home" Checked="OnNav" IsChecked="True">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Home24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Home" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.home}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton x:Name="NavMapping" Style="{StaticResource NavButton}" Tag="mapping" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="XboxController24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Tasti" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.mapping}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavButton}" Tag="sticks" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="CursorClick24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Touchpad e stick" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.sticks}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavButton}" Tag="lights" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Lightbulb24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Luci e vibrazione" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.lights}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavButton}" Tag="profiles" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="PersonAccounts24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Profili" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.profiles}" />
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavButton}" Tag="advanced" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Gauge24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Avanzate" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.advanced}" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -79,15 +80,15 @@
                             </Grid.ColumnDefinitions>
                             <Ellipse x:Name="StatusDot" Width="10" Height="10" Fill="#6B7280" VerticalAlignment="Center" />
                             <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                                <TextBlock x:Name="StatusTitle" FontWeight="SemiBold" Text="Nessun controller" />
-                                <TextBlock x:Name="StatusDetail" Style="{StaticResource Caption}" Text="In attesa del DualSense…" />
+                                <TextBlock x:Name="StatusTitle" FontWeight="SemiBold" Text="{l:T status.none.title}" />
+                                <TextBlock x:Name="StatusDetail" Style="{StaticResource Caption}" Text="{l:T status.none.detail}" />
                             </StackPanel>
                         </Grid>
                     </Border>
                     <RadioButton Style="{StaticResource NavButton}" Tag="settings" Checked="OnNav">
                         <StackPanel Orientation="Horizontal">
                             <ui:SymbolIcon Symbol="Settings24" FontSize="20" />
-                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="Impostazioni" />
+                            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{l:T nav.settings}" />
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -106,12 +107,12 @@
                     <!-- Toolbar shared by every page -->
                     <Grid Margin="28,16,28,0">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource Caption}" FontSize="13" Text="Profilo" />
+                            <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource Caption}" FontSize="13" Text="{l:T toolbar.profile}" />
                             <ComboBox x:Name="ProfileBox" MinWidth="190" DisplayMemberPath="Name"
                                       ItemsSource="{Binding Profiles}" SelectedItem="{Binding ActiveProfile, Mode=TwoWay}" />
                             <Border Width="1" Margin="16,6" Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
                             <ui:ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding MappingEnabled, Mode=TwoWay}"
-                                             OnContent="Mappatura attiva" OffContent="Mappatura in pausa" />
+                                             OnContent="{l:T toolbar.mappingOn}" OffContent="{l:T toolbar.mappingOff}" />
                         </StackPanel>
                     </Grid>
 
@@ -125,12 +126,12 @@
                          Icon="pack://application:,,,/Assets/dualpad.png" LeftClick="OnTrayClick">
             <tray:NotifyIcon.Menu>
                 <ContextMenu>
-                    <MenuItem Header="Apri DualPad" Click="OnTrayOpen" />
-                    <MenuItem x:Name="TrayMapping" Header="Mappatura attiva" IsCheckable="True"
+                    <MenuItem Header="{l:T tray.open}" Click="OnTrayOpen" />
+                    <MenuItem x:Name="TrayMapping" Header="{l:T toolbar.mappingOn}" IsCheckable="True"
                               IsChecked="{Binding MappingEnabled, Mode=TwoWay}" />
-                    <MenuItem Header="Spegni controller" Click="OnTrayPowerOff" />
+                    <MenuItem Header="{l:T tray.powerOff}" Click="OnTrayPowerOff" />
                     <Separator />
-                    <MenuItem Header="Esci" Click="OnTrayExit" />
+                    <MenuItem Header="{l:T tray.exit}" Click="OnTrayExit" />
                 </ContextMenu>
             </tray:NotifyIcon.Menu>
         </tray:NotifyIcon>

@@ -93,11 +93,11 @@ public sealed class XboxOutput : IDisposable
             }
             catch (VigemBusNotFoundException ex)
             {
-                throw new ViGEmUnavailableException("Il driver ViGEmBus non è installato.", ex);
+                throw new ViGEmUnavailableException("The ViGEmBus driver is not installed.", ex);
             }
             catch (Exception ex) when (ex is VigemBusAccessFailedException or VigemBusVersionMismatchException)
             {
-                throw new ViGEmUnavailableException("Impossibile accedere al driver ViGEmBus.", ex);
+                throw new ViGEmUnavailableException("The ViGEmBus driver could not be opened.", ex);
             }
         }
     }

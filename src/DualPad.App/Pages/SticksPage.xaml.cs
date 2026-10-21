@@ -12,12 +12,12 @@ namespace DualPad.App.Pages;
 
 public partial class SticksPage : UserControl
 {
-    private static readonly (StickTarget Target, string Label)[] Targets =
+    private static readonly (StickTarget Target, string LabelKey)[] Targets =
     [
-        (StickTarget.LeftStick, "Stick sinistro Xbox"),
-        (StickTarget.RightStick, "Stick destro Xbox"),
-        (StickTarget.Mouse, "Mouse"),
-        (StickTarget.None, "Disattivato"),
+        (StickTarget.LeftStick, "sticks.target.left"),
+        (StickTarget.RightStick, "sticks.target.right"),
+        (StickTarget.Mouse, "sticks.target.mouse"),
+        (StickTarget.None, "sticks.target.off"),
     ];
 
     private sealed class StickPreview
@@ -34,7 +34,7 @@ public partial class SticksPage : UserControl
     {
         InitializeComponent();
         foreach (var box in new[] { LeftTarget, RightTarget })
-            foreach (var (_, label) in Targets) box.Items.Add(label);
+            foreach (var (_, labelKey) in Targets) box.Items.Add(Loc.T(labelKey));
 
         _leftPreview = BuildPreview(LeftPreview);
         _rightPreview = BuildPreview(RightPreview);

@@ -42,7 +42,7 @@ public partial class AdvancedPage : UserControl
 
         if (session is null)
         {
-            LiveRate.Text = "Collega il controller";
+            LiveRate.Text = Loc.T("advanced.connect");
             ConnectionTip.Text = "";
             return;
         }
@@ -50,12 +50,10 @@ public partial class AdvancedPage : UserControl
         if (!_running)
         {
             var (intervals, _) = session.Stats.Snapshot();
-            LiveRate.Text = intervals.Average > 0 ? $"Ora: {1000 / intervals.Average:0} report/s" : "";
+            LiveRate.Text = intervals.Average > 0 ? Loc.T("advanced.liveRate", Math.Round(1000 / intervals.Average)) : "";
         }
 
-        ConnectionTip.Text = session.Device.Connection == ConnectionType.Bluetooth
-            ? "Sei collegato via Bluetooth: per scendere ancora di latenza usa il cavo USB-C, che elimina il tratto radio."
-            : "Sei collegato via USB: è già la connessione con la latenza più bassa.";
+        ConnectionTip.Text = Loc.T(session.Device.Connection == ConnectionType.Bluetooth ? "advanced.tip.bt" : "advanced.tip.usb");
     }
 
     private async void OnStartTest(object sender, RoutedEventArgs e)
@@ -88,31 +86,30 @@ public partial class AdvancedPage : UserControl
         Tiles.Visibility = Visibility.Visible;
 
         RateValue.Text = $"{r.ReportRateHz:0} Hz";
-        RateDetail.Text = $"un report ogni {Ms(r.ReportIntervals.Average)}";
+        RateDetail.Text = Loc.T("advanced.rateDetail", Ms(r.ReportIntervals.Average));
         JitterValue.Text = Ms(r.ReportIntervals.P99);
-        JitterDetail.Text = $"massimo {Ms(r.ReportIntervals.Max)}";
+        JitterDetail.Text = Loc.T("advanced.max", Ms(r.ReportIntervals.Max));
         ProcessingValue.Text = Ms(r.Processing.Median);
-        ProcessingDetail.Text = $"99% entro {Ms(r.Processing.P99)}";
+        ProcessingDetail.Text = Loc.T("advanced.within", Ms(r.Processing.P99));
         if (r.DeliveryMeasured)
         {
             DeliveryValue.Text = Ms(r.Delivery.Median);
-            DeliveryDetail.Text = $"99% entro {Ms(r.Delivery.P99)} · {r.Delivery.Count} campioni";
+            DeliveryDetail.Text = Loc.T("advanced.withinSamples", Ms(r.Delivery.P99), r.Delivery.Count);
         }
         else
         {
             DeliveryValue.Text = "—";
-            DeliveryDetail.Text = "muovi gli stick durante il test";
+            DeliveryDetail.Text = Loc.T("advanced.moveSticks");
         }
 
         var bluetooth = session.Device.Connection == ConnectionType.Bluetooth;
         var added = r.AddedMedianMs;
         Verdict.Severity = added < 1 ? InfoBarSeverity.Success : added < 3 ? InfoBarSeverity.Informational : InfoBarSeverity.Warning;
-        Verdict.Title = added < 1 ? "Ottimo: DualPad non rallenta il controller" : added < 3 ? "Buono" : "Ritardo più alto del previsto";
+        Verdict.Title = Loc.T(added < 1 ? "advanced.verdict.great" : added < 3 ? "advanced.verdict.good" : "advanced.verdict.high");
         Verdict.Message =
-            $"DualPad aggiunge circa {Ms(added)} tra l'arrivo dei dati e il gioco. " +
-            $"In più, in media, un input aspetta {Ms(r.PollingDelayMs)} il report successivo del controller ({(bluetooth ? "Bluetooth" : "USB")}). " +
-            (added >= 3 ? "Prova ad attivare la priorità alta e a chiudere i programmi pesanti in background." :
-                bluetooth ? "Il margine rimasto è nel collegamento radio: con il cavo USB è più basso." : "");
+            Loc.T("advanced.verdict.added", Ms(added)) +
+            Loc.T("advanced.verdict.polling", Ms(r.PollingDelayMs), bluetooth ? "Bluetooth" : "USB") +
+            (added >= 3 ? Loc.T("advanced.verdict.tryPriority") : bluetooth ? Loc.T("advanced.verdict.radio") : "");
         Verdict.IsOpen = true;
     }
 

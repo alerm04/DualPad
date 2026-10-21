@@ -23,6 +23,8 @@ public partial class App : Application
             base.OnStartup(e);
             _started = true;
             _snapshot = true;
+            var lang = Array.IndexOf(e.Args, "--lang");
+            Loc.Init(lang >= 0 && lang + 1 < e.Args.Length ? e.Args[lang + 1] : AppState.Instance.Settings.Language);
             ApplyTheme(e.Args.Contains("--light") ? "Light" : "Dark");
             Snapshot.Run(e.Args[1], live: e.Args.Contains("--live"));
             return;
@@ -42,6 +44,7 @@ public partial class App : Application
 
         _started = true;
         var state = AppState.Instance;
+        Loc.Init(state.Settings.Language);
         ApplyTheme(state.Settings.Theme);
         state.ApplyProcessPriority();
 
@@ -88,7 +91,7 @@ public partial class App : Application
 
     private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        MessageBox.Show(e.Exception.Message, "DualPad - errore", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(e.Exception.Message, Loc.T("app.errorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
         e.Handled = true;
     }
 

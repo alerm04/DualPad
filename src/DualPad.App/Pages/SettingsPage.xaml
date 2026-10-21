@@ -1,70 +1,78 @@
 <UserControl x:Class="DualPad.App.Pages.SettingsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:DualPad.App.Services"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="28,4,28,28" MaxWidth="900" HorizontalAlignment="Left">
-            <TextBlock Style="{StaticResource PageTitle}" Text="Impostazioni" />
+            <TextBlock Style="{StaticResource PageTitle}" Text="{l:T nav.settings}" />
 
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Avvio" />
-            <ui:CardControl Icon="{ui:SymbolIcon Power24}" Header="Avvia DualPad con Windows">
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T settings.startup}" />
+            <ui:CardControl Icon="{ui:SymbolIcon Power24}" Header="{l:T settings.startWithWindows}">
                 <ui:ToggleSwitch x:Name="StartWithWindows" Click="OnChanged" />
             </ui:CardControl>
-            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Window24}" Header="Avvia ridotto a icona nell'area di notifica">
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Window24}" Header="{l:T settings.startMinimized}">
                 <ui:ToggleSwitch x:Name="StartMinimized" Click="OnChanged" />
             </ui:CardControl>
-            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon WindowArrowUp24}" Header="Chiudendo la finestra resta attivo vicino all'orologio">
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon WindowArrowUp24}" Header="{l:T settings.minimizeToTray}">
                 <ui:ToggleSwitch x:Name="MinimizeToTray" Click="OnChanged" />
             </ui:CardControl>
-            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Info24}" Header="Notifiche di connessione e batteria">
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon Info24}" Header="{l:T settings.notifications}">
                 <ui:ToggleSwitch x:Name="Notifications" Click="OnChanged" />
             </ui:CardControl>
 
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Aspetto" />
-            <ui:CardControl Icon="{ui:SymbolIcon PaintBrush24}" Header="Tema">
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T settings.appearance}" />
+            <ui:CardControl Icon="{ui:SymbolIcon PaintBrush24}" Header="{l:T settings.theme}">
                 <ComboBox x:Name="Theme" MinWidth="160" SelectionChanged="OnThemeChanged">
-                    <ComboBoxItem Content="Come Windows" Tag="System" />
-                    <ComboBoxItem Content="Scuro" Tag="Dark" />
-                    <ComboBoxItem Content="Chiaro" Tag="Light" />
+                    <ComboBoxItem Content="{l:T settings.theme.system}" Tag="System" />
+                    <ComboBoxItem Content="{l:T settings.theme.dark}" Tag="Dark" />
+                    <ComboBoxItem Content="{l:T settings.theme.light}" Tag="Light" />
                 </ComboBox>
             </ui:CardControl>
+            <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon LocalLanguage24}" Header="{l:T settings.language}">
+                <ComboBox x:Name="LanguageBox" MinWidth="160" DisplayMemberPath="Name" SelectionChanged="OnLanguageChanged" />
+            </ui:CardControl>
+            <ui:InfoBar x:Name="LanguageRestart" Margin="0,6,0,0" IsOpen="False" IsClosable="False" Severity="Informational"
+                        Title="{l:T settings.language.restart}">
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowClockwise24}" Content="{l:T settings.restart}" Click="OnRestartApp" />
+            </ui:InfoBar>
 
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Giochi" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T settings.games}" />
             <ui:CardControl Icon="{ui:SymbolIcon EyeOff24}">
                 <ui:CardControl.Header>
                     <StackPanel>
-                        <TextBlock FontSize="14" Text="Nascondi il DualSense ai giochi (HidHide)" />
+                        <TextBlock FontSize="14" Text="{l:T settings.hide}" />
                         <TextBlock x:Name="HidHideStatus" Style="{StaticResource Caption}"
-                                   Text="Evita il doppio input nei giochi che leggono anche il controller PlayStation." />
+                                   Text="{l:T settings.hide.caption}" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch x:Name="HideController" Click="OnHideChanged" />
             </ui:CardControl>
             <StackPanel x:Name="HidHideActions" Orientation="Horizontal" Margin="0,8,0,0">
-                <ui:Button x:Name="UnhideButton" Content="Rendi di nuovo visibile il controller" Click="OnUnhide" />
+                <ui:Button x:Name="UnhideButton" Content="{l:T settings.unhide}" Click="OnUnhide" />
             </StackPanel>
 
             <DockPanel Margin="0,18,0,8">
                 <ui:Button x:Name="InstallMissing" DockPanel.Dock="Right" Appearance="Primary" Icon="{ui:SymbolIcon ArrowDownload24}"
-                           Content="Installa tutto ciò che manca" Click="OnInstallMissing" />
+                           Content="{l:T settings.installMissing}" Click="OnInstallMissing" />
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="Driver e componenti" />
+                    <TextBlock FontSize="15" FontWeight="SemiBold" Text="{l:T settings.drivers}" />
                     <TextBlock x:Name="DriversSummary" Style="{StaticResource Caption}" Margin="0,2,0,0" />
                 </StackPanel>
             </DockPanel>
             <StackPanel x:Name="DriverList" />
             <ui:InfoBar x:Name="DriverResult" Margin="0,8,0,0" IsOpen="False" IsClosable="True" />
             <StackPanel x:Name="RestartRow" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Collapsed">
-                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowClockwise24}" Content="Riavvia DualPad" Click="OnRestartApp" />
+                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowClockwise24}" Content="{l:T settings.restart}" Click="OnRestartApp" />
             </StackPanel>
             <TextBlock Margin="0,8,0,0" Style="{StaticResource Caption}"
-                       Text="Le installazioni usano winget (il gestore pacchetti di Windows) e scaricano dalle fonti ufficiali. Windows chiederà i permessi di amministratore; installando accetti le licenze dei componenti." />
+                       Text="{l:T settings.drivers.note}" />
 
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Informazioni" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T settings.about}" />
             <Border Style="{StaticResource Panel}">
                 <StackPanel>
                     <TextBlock FontWeight="SemiBold" x:Name="VersionText" Text="DualPad" />
-                    <ui:Button Margin="0,12,0,0" Icon="{ui:SymbolIcon OpenFolder24}" Content="Apri cartella dei dati" Click="OnOpenData" />
+                    <ui:Button Margin="0,12,0,0" Icon="{ui:SymbolIcon OpenFolder24}" Content="{l:T settings.openData}" Click="OnOpenData" />
                 </StackPanel>
             </Border>
         </StackPanel>

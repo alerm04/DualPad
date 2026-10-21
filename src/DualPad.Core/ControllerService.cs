@@ -54,7 +54,7 @@ public sealed class ControllerSession : IDisposable
         }
         catch (Exception ex)
         {
-            XboxError = ex is ViGEmUnavailableException ? ex.Message : "Impossibile creare il controller Xbox virtuale: " + ex.Message;
+            XboxError = ex is ViGEmUnavailableException ? ex.Message : "Could not create the virtual Xbox controller: " + ex.Message;
         }
 
         device.StateReceived += OnState;

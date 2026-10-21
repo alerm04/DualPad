@@ -242,6 +242,38 @@ public class MappingTests
     }
 }
 
+public class TranslationTests
+{
+    private static readonly string Dir = Path.Combine(AppContext.BaseDirectory, "Localization");
+
+    private static Dictionary<string, string> Read(string file) =>
+        System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(file))!;
+
+    private static string Placeholders(string text) =>
+        string.Join(",", System.Text.RegularExpressions.Regex.Matches(text, @"\{\d+\}").Select(m => m.Value).Order());
+
+    public static TheoryData<string> Languages()
+    {
+        var data = new TheoryData<string>();
+        foreach (var file in Directory.EnumerateFiles(Dir, "*.json")) data.Add(Path.GetFileNameWithoutExtension(file));
+        return data;
+    }
+
+    [Theory]
+    [MemberData(nameof(Languages))]
+    public void TranslationMatchesEnglish(string language)
+    {
+        var english = Read(Path.Combine(Dir, "en.json"));
+        var translated = Read(Path.Combine(Dir, language + ".json"));
+
+        Assert.Empty(english.Keys.Except(translated.Keys));
+        Assert.Empty(translated.Keys.Except(english.Keys));
+        Assert.False(string.IsNullOrWhiteSpace(translated["_language"]));
+        foreach (var (key, text) in english)
+            Assert.True(Placeholders(text) == Placeholders(translated[key]), $"{language}: placeholders differ for {key}");
+    }
+}
+
 public class DiagnosticsTests
 {
     [Theory]

@@ -1,14 +1,15 @@
 <UserControl x:Class="DualPad.App.Pages.SticksPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:DualPad.App.Services"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="28,4,28,28">
-            <TextBlock Style="{StaticResource PageTitle}" Text="Touchpad e stick" />
-            <TextBlock Style="{StaticResource PageSubtitle}" Text="Regola il cursore del touchpad, le zone morte degli stick e dei grilletti. Le anteprime si muovono con il controller." />
+            <TextBlock Style="{StaticResource PageTitle}" Text="{l:T nav.sticks}" />
+            <TextBlock Style="{StaticResource PageSubtitle}" Text="{l:T sticks.subtitle}" />
 
             <!-- Touchpad -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Touchpad" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T sticks.touchpad}" />
             <Border Style="{StaticResource Panel}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -16,23 +17,23 @@
                         <ColumnDefinition Width="316" />
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <ui:ToggleSwitch x:Name="TouchMouse" Content="Usa il touchpad come mouse" Click="OnTouchChanged" />
-                        <TextBlock Margin="0,16,0,4" Text="Velocità del cursore" />
+                        <ui:ToggleSwitch x:Name="TouchMouse" Content="{l:T sticks.touchMouse}" Click="OnTouchChanged" />
+                        <TextBlock Margin="0,16,0,4" Text="{l:T sticks.speed}" />
                         <DockPanel>
                             <TextBlock x:Name="SensitivityValue" DockPanel.Dock="Right" Width="44" TextAlignment="Right" VerticalAlignment="Center" />
                             <Slider x:Name="Sensitivity" Minimum="0.2" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="OnTouchSlider" />
                         </DockPanel>
-                        <ui:ToggleSwitch x:Name="TouchAccel" Margin="0,14,0,0" Content="Accelerazione (gesti veloci vanno più lontano)" Click="OnTouchChanged" />
-                        <ui:ToggleSwitch x:Name="TapClick" Margin="0,10,0,0" Content="Tocca per cliccare (due dita = clic destro)" Click="OnTouchChanged" />
-                        <ui:ToggleSwitch x:Name="TwoFingerScroll" Margin="0,10,0,0" Content="Scorri con due dita" Click="OnTouchChanged" />
-                        <ui:ToggleSwitch x:Name="RightZone" Margin="0,10,0,0" Content="Premi il lato destro per il clic destro" Click="OnTouchChanged" />
+                        <ui:ToggleSwitch x:Name="TouchAccel" Margin="0,14,0,0" Content="{l:T sticks.accel}" Click="OnTouchChanged" />
+                        <ui:ToggleSwitch x:Name="TapClick" Margin="0,10,0,0" Content="{l:T sticks.tap}" Click="OnTouchChanged" />
+                        <ui:ToggleSwitch x:Name="TwoFingerScroll" Margin="0,10,0,0" Content="{l:T sticks.scroll}" Click="OnTouchChanged" />
+                        <ui:ToggleSwitch x:Name="RightZone" Margin="0,10,0,0" Content="{l:T sticks.rightZone}" Click="OnTouchChanged" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Margin="24,0,0,0">
-                        <TextBlock Style="{StaticResource Caption}" Text="Anteprima" />
+                        <TextBlock Style="{StaticResource Caption}" Text="{l:T common.preview}" />
                         <Border Margin="0,6,0,0" Width="288" Height="162" CornerRadius="14" Background="#E9ECF1" BorderBrush="#C4C9D1" BorderThickness="1" ClipToBounds="True">
                             <Canvas x:Name="TouchCanvas">
                                 <Rectangle x:Name="RightZoneShade" Canvas.Left="144" Width="144" Height="162" Fill="#223B8EFF" />
-                                <TextBlock x:Name="RightZoneLabel" Canvas.Left="160" Canvas.Top="136" FontSize="11" Foreground="#5A6270" Text="zona clic destro" />
+                                <TextBlock x:Name="RightZoneLabel" Canvas.Left="160" Canvas.Top="136" FontSize="11" Foreground="#5A6270" Text="{l:T sticks.rightZoneLabel}" />
                                 <Ellipse x:Name="Finger0" Width="22" Height="22" Fill="#D03B8EFF" Stroke="White" StrokeThickness="2" Visibility="Hidden" />
                                 <Ellipse x:Name="Finger1" Width="22" Height="22" Fill="#D07C3AED" Stroke="White" StrokeThickness="2" Visibility="Hidden" />
                             </Canvas>
@@ -42,34 +43,34 @@
             </Border>
 
             <!-- Sticks -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Stick analogici" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T sticks.analog}" />
             <UniformGrid Columns="2">
                 <Border Style="{StaticResource Panel}" Margin="0,0,8,0">
                     <StackPanel x:Name="LeftStickPanel" Tag="left">
-                        <TextBlock FontWeight="SemiBold" FontSize="15" Text="Stick sinistro" />
+                        <TextBlock FontWeight="SemiBold" FontSize="15" Text="{l:T sticks.left}" />
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="120" />
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Funziona come" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T sticks.worksAs}" />
                                 <ComboBox x:Name="LeftTarget" Margin="0,4,0,0" SelectionChanged="OnStickChanged" />
-                                <TextBlock Margin="0,12,0,2" Style="{StaticResource Caption}" Text="Zona morta" />
+                                <TextBlock Margin="0,12,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.deadZone}" />
                                 <DockPanel>
                                     <TextBlock x:Name="LeftDeadValue" DockPanel.Dock="Right" Width="40" TextAlignment="Right" />
                                     <Slider x:Name="LeftDead" Minimum="0" Maximum="0.4" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </DockPanel>
-                                <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="Risposta (1 = lineare, più alto = più preciso al centro)" />
+                                <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.curve}" />
                                 <DockPanel>
                                     <TextBlock x:Name="LeftCurveValue" DockPanel.Dock="Right" Width="40" TextAlignment="Right" />
                                     <Slider x:Name="LeftCurve" Minimum="0.5" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </DockPanel>
                                 <StackPanel x:Name="LeftMouseRow" Visibility="Collapsed">
-                                    <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="Velocità del mouse" />
+                                    <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.mouseSpeed}" />
                                     <Slider x:Name="LeftMouseSpeed" Minimum="2" Maximum="40" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </StackPanel>
-                                <ui:ToggleSwitch x:Name="LeftInvert" Margin="0,12,0,0" Content="Inverti asse verticale" Click="OnStickToggle" />
+                                <ui:ToggleSwitch x:Name="LeftInvert" Margin="0,12,0,0" Content="{l:T sticks.invert}" Click="OnStickToggle" />
                             </StackPanel>
                             <Canvas x:Name="LeftPreview" Grid.Column="1" Width="110" Height="110" Margin="10,0,0,0" VerticalAlignment="Top" />
                         </Grid>
@@ -77,30 +78,30 @@
                 </Border>
                 <Border Style="{StaticResource Panel}" Margin="8,0,0,0">
                     <StackPanel x:Name="RightStickPanel" Tag="right">
-                        <TextBlock FontWeight="SemiBold" FontSize="15" Text="Stick destro" />
+                        <TextBlock FontWeight="SemiBold" FontSize="15" Text="{l:T sticks.right}" />
                         <Grid Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="120" />
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource Caption}" Text="Funziona come" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T sticks.worksAs}" />
                                 <ComboBox x:Name="RightTarget" Margin="0,4,0,0" SelectionChanged="OnStickChanged" />
-                                <TextBlock Margin="0,12,0,2" Style="{StaticResource Caption}" Text="Zona morta" />
+                                <TextBlock Margin="0,12,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.deadZone}" />
                                 <DockPanel>
                                     <TextBlock x:Name="RightDeadValue" DockPanel.Dock="Right" Width="40" TextAlignment="Right" />
                                     <Slider x:Name="RightDead" Minimum="0" Maximum="0.4" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </DockPanel>
-                                <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="Risposta (1 = lineare, più alto = più preciso al centro)" />
+                                <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.curve}" />
                                 <DockPanel>
                                     <TextBlock x:Name="RightCurveValue" DockPanel.Dock="Right" Width="40" TextAlignment="Right" />
                                     <Slider x:Name="RightCurve" Minimum="0.5" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </DockPanel>
                                 <StackPanel x:Name="RightMouseRow" Visibility="Collapsed">
-                                    <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="Velocità del mouse" />
+                                    <TextBlock Margin="0,10,0,2" Style="{StaticResource Caption}" Text="{l:T sticks.mouseSpeed}" />
                                     <Slider x:Name="RightMouseSpeed" Minimum="2" Maximum="40" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnStickSlider" />
                                 </StackPanel>
-                                <ui:ToggleSwitch x:Name="RightInvert" Margin="0,12,0,0" Content="Inverti asse verticale" Click="OnStickToggle" />
+                                <ui:ToggleSwitch x:Name="RightInvert" Margin="0,12,0,0" Content="{l:T sticks.invert}" Click="OnStickToggle" />
                             </StackPanel>
                             <Canvas x:Name="RightPreview" Grid.Column="1" Width="110" Height="110" Margin="10,0,0,0" VerticalAlignment="Top" />
                         </Grid>
@@ -109,7 +110,7 @@
             </UniformGrid>
 
             <!-- Triggers -->
-            <TextBlock Style="{StaticResource SectionTitle}" Text="Grilletti L2 / R2" />
+            <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T sticks.triggers}" />
             <Border Style="{StaticResource Panel}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -117,8 +118,8 @@
                         <ColumnDefinition Width="300" />
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="Zona morta" />
-                        <TextBlock Style="{StaticResource Caption}" Text="Sotto questa soglia il grilletto conta come rilasciato." />
+                        <TextBlock Text="{l:T sticks.deadZone}" />
+                        <TextBlock Style="{StaticResource Caption}" Text="{l:T sticks.triggerDead}" />
                         <DockPanel Margin="0,8,0,0">
                             <TextBlock x:Name="TriggerDeadValue" DockPanel.Dock="Right" Width="44" TextAlignment="Right" />
                             <Slider x:Name="TriggerDead" Minimum="0" Maximum="60" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="OnTriggerSlider" />

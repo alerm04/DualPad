@@ -12,13 +12,13 @@ namespace DualPad.App.Pages;
 
 public partial class MappingPage : UserControl
 {
-    private static readonly (string Title, XboxControl[] Controls)[] XboxGroups =
+    private static readonly (string TitleKey, XboxControl[] Controls)[] XboxGroups =
     [
-        ("Pulsanti", [XboxControl.A, XboxControl.B, XboxControl.X, XboxControl.Y]),
-        ("Dorsali e grilletti", [XboxControl.LeftBumper, XboxControl.RightBumper, XboxControl.LeftTrigger, XboxControl.RightTrigger]),
-        ("Sistema", [XboxControl.Back, XboxControl.Start, XboxControl.Guide]),
-        ("Pressione stick", [XboxControl.LeftThumb, XboxControl.RightThumb]),
-        ("Croce direzionale", [XboxControl.DpadUp, XboxControl.DpadDown, XboxControl.DpadLeft, XboxControl.DpadRight]),
+        ("mapping.group.buttons", [XboxControl.A, XboxControl.B, XboxControl.X, XboxControl.Y]),
+        ("mapping.group.bumpers", [XboxControl.LeftBumper, XboxControl.RightBumper, XboxControl.LeftTrigger, XboxControl.RightTrigger]),
+        ("mapping.group.system", [XboxControl.Back, XboxControl.Start, XboxControl.Guide]),
+        ("mapping.group.thumbs", [XboxControl.LeftThumb, XboxControl.RightThumb]),
+        ("mapping.group.dpad", [XboxControl.DpadUp, XboxControl.DpadDown, XboxControl.DpadLeft, XboxControl.DpadRight]),
     ];
 
     private static readonly int[] CommonKeyCodes =
@@ -109,10 +109,10 @@ public partial class MappingPage : UserControl
         SelectedAction.Text = Labels.Long(action);
 
         var standard = Profile.XboxLayout().GetValueOrDefault(_selected, ButtonAction.None);
-        DefaultHint.Text = "Predefinito: " + Labels.Long(standard);
+        DefaultHint.Text = Loc.T("mapping.default", Labels.Long(standard));
 
         foreach (var (chip, chipAction) in _chips) chip.IsChecked = chipAction == action;
-        KeyCaptureText.Text = action.Kind == ActionKind.Keyboard ? Labels.KeyName(action.Key) : "Clicca qui e premi un tasto";
+        KeyCaptureText.Text = action.Kind == ActionKind.Keyboard ? Labels.KeyName(action.Key) : Loc.T("mapping.key.prompt");
 
         RefreshOverview();
     }
@@ -161,7 +161,7 @@ public partial class MappingPage : UserControl
             Background = (Brush)FindResource("ControlFillColorDefaultBrush"),
             Cursor = Cursors.Hand,
             Child = content,
-            ToolTip = Labels.Name(button) + " · " + Labels.Long(action) + (changed ? " (personalizzato)" : ""),
+            ToolTip = Labels.Name(button) + " · " + Labels.Long(action) + (changed ? Loc.T("mapping.customized") : ""),
         };
         chip.MouseLeftButtonUp += (_, _) => Select(button);
         return chip;
@@ -169,9 +169,9 @@ public partial class MappingPage : UserControl
 
     private void BuildXboxChoices()
     {
-        foreach (var (title, controls) in XboxGroups)
+        foreach (var (titleKey, controls) in XboxGroups)
         {
-            XboxPanel.Children.Add(new TextBlock { Text = title, Style = (Style)FindResource("SectionTitle"), Margin = new Thickness(0, 4, 0, 8) });
+            XboxPanel.Children.Add(new TextBlock { Text = Loc.T(titleKey), Style = (Style)FindResource("SectionTitle"), Margin = new Thickness(0, 4, 0, 8) });
             var wrap = new WrapPanel();
             foreach (var control in controls)
             {
@@ -252,14 +252,14 @@ public partial class MappingPage : UserControl
     private void OnKeyCaptureFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
         KeyCapture.BorderBrush = (Brush)FindResource("BrandBrush");
-        KeyCaptureText.Text = "Premi un tasto…";
-        KeyCaptureHint.Text = "Esc assegna Esc · clicca altrove per annullare";
+        KeyCaptureText.Text = Loc.T("mapping.key.listening");
+        KeyCaptureHint.Text = Loc.T("mapping.key.listeningHint");
     }
 
     private void OnKeyCaptureBlur(object sender, KeyboardFocusChangedEventArgs e)
     {
         KeyCapture.BorderBrush = (Brush)FindResource("ControlStrokeColorDefaultBrush");
-        KeyCaptureHint.Text = "Il tasto premuto verrà assegnato";
+        KeyCaptureHint.Text = Loc.T("mapping.key.hint");
         Refresh();
     }
 
@@ -288,7 +288,7 @@ public partial class MappingPage : UserControl
 
     private void OnResetAll(object sender, RoutedEventArgs e)
     {
-        var result = System.Windows.MessageBox.Show("Riportare tutti i tasti del profilo al layout Xbox standard?", "Ripristina layout Xbox",
+        var result = System.Windows.MessageBox.Show(Loc.T("mapping.resetAll.confirm"), Loc.T("mapping.resetAll"),
             MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result != MessageBoxResult.Yes) return;
         AppState.Instance.UpdateProfile(p => p with { Buttons = Profile.XboxLayout() });

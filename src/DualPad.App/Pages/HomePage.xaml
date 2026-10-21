@@ -1,25 +1,26 @@
 <UserControl x:Class="DualPad.App.Pages.HomePage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:DualPad.App.Services"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:c="clr-namespace:DualPad.App.Controls">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="28,4,28,28">
-            <TextBlock Style="{StaticResource PageTitle}" Text="Il tuo controller" />
+            <TextBlock Style="{StaticResource PageTitle}" Text="{l:T home.title}" />
             <TextBlock Style="{StaticResource PageSubtitle}"
-                       Text="DualPad trasforma il DualSense in un controller Xbox per Windows. Il touchpad funziona come mouse." />
+                       Text="{l:T home.subtitle}" />
 
             <ui:InfoBar x:Name="ViGEmBar" Margin="0,16,0,0" IsOpen="False" IsClosable="False" Severity="Error"
-                        Title="Driver ViGEmBus mancante"
-                        Message="Serve per creare il controller Xbox virtuale. Installalo e riavvia DualPad." />
+                        Title="{l:T home.vigem.title}"
+                        Message="{l:T home.vigem.message}" />
             <ui:InfoBar x:Name="BlockedBar" Margin="0,16,0,0" IsOpen="False" IsClosable="False" Severity="Warning"
-                        Title="Il DualSense è usato da un'altra app"
-                        Message="Probabilmente DS4Windows è aperto e tiene il controller in modo esclusivo. Chiudilo per usare DualPad." />
+                        Title="{l:T home.blocked.title}"
+                        Message="{l:T home.blocked.message}" />
             <StackPanel x:Name="BlockedActions" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Collapsed">
-                <ui:Button Appearance="Primary" Content="Chiudi DS4Windows" Click="OnCloseDs4Windows" />
+                <ui:Button Appearance="Primary" Content="{l:T home.closeDs4}" Click="OnCloseDs4Windows" />
             </StackPanel>
             <StackPanel x:Name="ViGEmActions" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Collapsed">
-                <ui:HyperlinkButton Content="Scarica ViGEmBus" NavigateUri="https://github.com/nefarius/ViGEmBus/releases/latest" />
+                <ui:HyperlinkButton Content="{l:T home.downloadVigem}" NavigateUri="https://github.com/nefarius/ViGEmBus/releases/latest" />
             </StackPanel>
 
             <Grid Margin="0,20,0,0">
@@ -34,12 +35,12 @@
                         <Border x:Name="EmptyState" Background="Transparent">
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="420">
                                 <ui:SymbolIcon Symbol="XboxController24" FontSize="48" HorizontalAlignment="Center" Foreground="{StaticResource BrandBrush}" />
-                                <TextBlock Margin="0,12,0,0" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Text="Collega il tuo DualSense" />
+                                <TextBlock Margin="0,12,0,0" HorizontalAlignment="Center" FontSize="20" FontWeight="SemiBold" Text="{l:T home.empty.title}" />
                                 <TextBlock Margin="0,10,0,0" TextAlignment="Center" Style="{StaticResource PageSubtitle}"
-                                           Text="Collegalo con il cavo USB-C oppure, se è già associato via Bluetooth, premi il tasto PS." />
+                                           Text="{l:T home.empty.text}" />
                                 <TextBlock Margin="0,14,0,0" TextAlignment="Center" Style="{StaticResource Caption}"
-                                           Text="Prima associazione Bluetooth: tieni premuti Crea + PS finché la luce lampeggia, poi aggiungilo da Impostazioni di Windows › Bluetooth e dispositivi." />
-                                <ui:Button Margin="0,16,0,0" HorizontalAlignment="Center" Content="Apri impostazioni Bluetooth" Icon="{ui:SymbolIcon Bluetooth24}" Click="OnOpenBluetooth" />
+                                           Text="{l:T home.empty.pairing}" />
+                                <ui:Button Margin="0,16,0,0" HorizontalAlignment="Center" Content="{l:T home.empty.openBluetooth}" Icon="{ui:SymbolIcon Bluetooth24}" Click="OnOpenBluetooth" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -54,8 +55,8 @@
                             </Grid.ColumnDefinitions>
                             <ui:SymbolIcon x:Name="ConnectionIcon" Symbol="PlugDisconnected24" FontSize="26" Foreground="{StaticResource BrandBrush}" />
                             <StackPanel Grid.Column="1" Margin="14,0,0,0">
-                                <TextBlock Style="{StaticResource Caption}" Text="Connessione" />
-                                <TextBlock x:Name="ConnectionText" FontSize="16" FontWeight="SemiBold" Text="Non collegato" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T home.connection}" />
+                                <TextBlock x:Name="ConnectionText" FontSize="16" FontWeight="SemiBold" Text="{l:T home.notConnected}" />
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -69,7 +70,7 @@
                                 </Grid.ColumnDefinitions>
                                 <ui:SymbolIcon x:Name="BatteryIcon" Symbol="Battery524" FontSize="26" Foreground="{StaticResource BrandBrush}" />
                                 <StackPanel Grid.Column="1" Margin="14,0,0,0">
-                                    <TextBlock Style="{StaticResource Caption}" Text="Batteria" />
+                                    <TextBlock Style="{StaticResource Caption}" Text="{l:T home.battery}" />
                                     <TextBlock x:Name="BatteryText" FontSize="16" FontWeight="SemiBold" Text="—" />
                                 </StackPanel>
                             </Grid>
@@ -85,7 +86,7 @@
                             </Grid.ColumnDefinitions>
                             <ui:SymbolIcon Symbol="Games24" FontSize="26" Foreground="{StaticResource BrandBrush}" />
                             <StackPanel Grid.Column="1" Margin="14,0,0,0">
-                                <TextBlock Style="{StaticResource Caption}" Text="Controller Xbox virtuale" />
+                                <TextBlock Style="{StaticResource Caption}" Text="{l:T home.xbox}" />
                                 <TextBlock x:Name="XboxText" FontSize="16" FontWeight="SemiBold" Text="—" TextWrapping="Wrap" />
                             </StackPanel>
                         </Grid>
@@ -93,18 +94,18 @@
 
                     <Border Style="{StaticResource Panel}" Margin="0,12,0,0">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource Caption}" Text="Profilo attivo" />
+                            <TextBlock Style="{StaticResource Caption}" Text="{l:T home.activeProfile}" />
                             <TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding ActiveProfile.Name}" />
                             <ui:Button Margin="0,12,0,0" HorizontalAlignment="Stretch" Appearance="Primary"
-                                       Icon="{ui:SymbolIcon Edit24}" Content="Personalizza i tasti" Click="OnEditMapping" />
+                                       Icon="{ui:SymbolIcon Edit24}" Content="{l:T home.customize}" Click="OnEditMapping" />
                         </StackPanel>
                     </Border>
 
                     <Border Style="{StaticResource Panel}" Margin="0,12,0,0">
                         <StackPanel>
-                            <TextBlock FontWeight="SemiBold" Text="Suggerimento" />
+                            <TextBlock FontWeight="SemiBold" Text="{l:T home.tip.title}" />
                             <TextBlock Margin="0,6,0,0" Style="{StaticResource Caption}"
-                                       Text="Il touchpad muove il cursore: tocca per cliccare, premi sul lato destro per il clic destro e scorri con due dita." />
+                                       Text="{l:T home.tip.text}" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
