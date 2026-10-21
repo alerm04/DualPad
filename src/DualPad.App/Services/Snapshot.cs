@@ -16,7 +16,6 @@ internal static class Snapshot
         var state = AppState.Instance;
         if (live)
         {
-            state.MappingEnabled = false;
             state.Start();
             await Task.Delay(2500);
         }
@@ -34,7 +33,7 @@ internal static class Snapshot
 
         foreach (var page in new[] { "home", "mapping", "sticks", "lights", "profiles", "advanced", "settings" })
         {
-            window.Navigate(page);
+            SelectNav(window, page);
             await Task.Delay(700);
             Save(window, Path.Combine(directory, page + ".png"));
             if (FindScroll(window.PageHost.Content as DependencyObject) is { } scroll && scroll.ScrollableHeight > 0)
@@ -70,6 +69,24 @@ internal static class Snapshot
         encoder.Frames.Add(BitmapFrame.Create(bitmap));
         using var stream = File.Create(file);
         encoder.Save(stream);
+    }
+
+    /// <summary>Checks the sidebar entry for the page, so the highlight matches what is shown.</summary>
+    private static void SelectNav(MainWindow window, string page)
+    {
+        var button = FindAll<System.Windows.Controls.RadioButton>(window).FirstOrDefault(b => b.Tag as string == page);
+        if (button is not null) button.IsChecked = true;
+        else window.Navigate(page);
+    }
+
+    private static IEnumerable<T> FindAll<T>(DependencyObject root) where T : DependencyObject
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+            if (child is T match) yield return match;
+            foreach (var nested in FindAll<T>(child)) yield return nested;
+        }
     }
 
     private static System.Windows.Controls.ScrollViewer? FindScroll(DependencyObject? root)
