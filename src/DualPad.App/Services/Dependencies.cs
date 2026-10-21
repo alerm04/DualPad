@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -30,7 +30,7 @@ public static class Dependencies
     private const int NoApplicableUpgrade = unchecked((int)0x8A15002B);
     private const int AlreadyInstalled = unchecked((int)0x8A150061);
 
-    public static IReadOnlyList<Dependency> All { get; } =
+    private static readonly Dependency[] Catalog =
     [
         new(DependencyKind.ViGEmBus, "ViGEmBus",
             "Driver che crea il controller Xbox 360 virtuale. Senza di esso i giochi non vedono il controller.",
@@ -45,6 +45,16 @@ public static class Dependencies
             Required: false, "Nefarius.HidHide", "https://github.com/nefarius/HidHide/releases/latest",
             "Riavvia il PC per completare l'installazione del driver."),
     ];
+
+    /// <summary>
+    /// True when DualPad runs on the machine-wide .NET runtime. The standalone build carries its own
+    /// runtime, so installing or updating .NET does not affect it.
+    /// </summary>
+    public static bool UsesSharedRuntime =>
+        RuntimeEnvironment.GetRuntimeDirectory().Contains(@"\dotnet\shared\", StringComparison.OrdinalIgnoreCase);
+
+    public static IReadOnlyList<Dependency> All =>
+        Catalog.Where(d => d.Kind != DependencyKind.DotNetRuntime || UsesSharedRuntime).ToList();
 
     public static bool IsWingetAvailable => FindWinget() is not null;
 
