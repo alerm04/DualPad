@@ -32,10 +32,12 @@
             <ui:CardControl Margin="0,6,0,0" Icon="{ui:SymbolIcon LocalLanguage24}" Header="{l:T settings.language}">
                 <ComboBox x:Name="LanguageBox" MinWidth="160" DisplayMemberPath="Name" SelectionChanged="OnLanguageChanged" />
             </ui:CardControl>
-            <ui:InfoBar x:Name="LanguageRestart" Margin="0,6,0,0" IsOpen="False" IsClosable="False" Severity="Informational"
-                        Title="{l:T settings.language.restart}">
-                <ui:Button Appearance="Primary" Icon="{ui:SymbolIcon ArrowClockwise24}" Content="{l:T settings.restart}" Click="OnRestartApp" />
-            </ui:InfoBar>
+            <!-- InfoBar does not show child content, so the button sits on top of it. -->
+            <Grid x:Name="LanguageRestart" Margin="0,6,0,0" Visibility="Collapsed">
+                <ui:InfoBar IsOpen="True" IsClosable="False" Severity="Informational" Title="{l:T settings.language.restart}" />
+                <ui:Button Margin="0,0,14,0" HorizontalAlignment="Right" VerticalAlignment="Center" Appearance="Primary"
+                           Icon="{ui:SymbolIcon ArrowClockwise24}" Content="{l:T settings.restart}" Click="OnRestartApp" />
+            </Grid>
 
             <TextBlock Style="{StaticResource SectionTitle}" Text="{l:T settings.games}" />
             <ui:CardControl Icon="{ui:SymbolIcon EyeOff24}">

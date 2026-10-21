@@ -76,7 +76,7 @@ public partial class SettingsPage : UserControl
         if (_loading || LanguageBox.SelectedItem is not LanguageInfo language) return;
         AppState.Instance.UpdateSettings(s => s with { Language = language.Code });
         // Text is loaded when pages are built, so the new language shows after a restart.
-        LanguageRestart.IsOpen = true;
+        LanguageRestart.Visibility = Visibility.Visible;
     }
 
     private void OnHideChanged(object sender, RoutedEventArgs e)
